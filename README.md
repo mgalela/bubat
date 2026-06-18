@@ -1,6 +1,6 @@
 # BUBAT
 
-Architecture documentation workspace. Document any software system through four levels of zoom using the [C4 model](https://c4model.com), then export a ready-to-use [cavekit](https://github.com/JuliusBrussee/cavekit) `SPEC.md` for implementation.
+Architecture documentation workspace. Document any software system through four levels of zoom using the [C4 model](https://c4model.com), then export a ready-to-use [cavekit](https://github.com/JuliusBrussee/cavekit) `SPEC.md` plus interface specs (OpenAPI, proto3, Go/TS/Java interfaces) for implementation.
 
 Inspired by / built on ideas from [Interpreted Context Methodology](https://github.com/RinDig/Interpreted-Context-Methdology).
 
@@ -13,7 +13,9 @@ raw/ → setup → 01-discovery → 01b-flow → 01c-bounded-context → 01d-dat
                                                                       ↓
                               06-spec ← 05-document ← 04-component ← 03-container ← 02-context
                                   ↓
-                             SPEC.md → cavekit /ck:build
+                      SPEC.md + openapi.yaml + .proto + interfaces.*
+                                  ↓
+                             cavekit /ck:build
 ```
 
 | Stage | Output |
@@ -26,7 +28,7 @@ raw/ → setup → 01-discovery → 01b-flow → 01c-bounded-context → 01d-dat
 | `03-container` | C4 Level 2 — container diagram, interface contracts, sequences |
 | `04-component` | C4 Level 3 — component diagrams per container |
 | `05-document` | Final architecture document (assembled, audience-ready) |
-| `06-spec` | `SPEC.md` bridge → cavekit implementation spec |
+| `06-spec` | `SPEC.md` bridge → cavekit spec + `openapi.yaml` + `.proto` + language interfaces |
 
 ---
 
@@ -46,6 +48,15 @@ Then add the printed line to your project `CLAUDE.md`:
 ```
 @.bubat/CLAUDE.md
 ```
+
+**Update an existing workspace** (preserves user data, updates framework files):
+```bash
+npx create-bubat --update my-arch
+npx create-bubat --update --dir .bubat
+```
+
+Preserved on update: `shared/system-meta.md`, `raw/MANIFEST.md`, `stages/*/output/*`.
+New stages added automatically.
 
 ---
 
@@ -80,6 +91,7 @@ stages/06-spec/...               → cavekit SPEC.md
 ```
 bridge
 → copy stages/06-spec/output/SPEC.md to project root
+→ copy openapi.yaml / .proto / interfaces.* to project as needed
 → /ck:review → /ck:build
 ```
 
@@ -92,7 +104,7 @@ bridge
 | `setup` | Onboarding — collect system info, populate `shared/system-meta.md` |
 | `raw route` | Scan `raw/`, assign each file to stage(s), write `raw/MANIFEST.md` |
 | `status` | Show pipeline completion across all stages |
-| `bridge` | Run stage 06-spec — convert all outputs into cavekit `SPEC.md` |
+| `bridge` | Run stage 06-spec — convert all outputs into `SPEC.md` + interface specs |
 | `diagram <stage>` | Re-render diagrams for a stage without re-running the full stage |
 | `update <stage(s)>` | Re-run stages after system changes — e.g. `update 03 04 05` |
 
@@ -111,8 +123,9 @@ BUBAT/
 ├── setup/
 │   └── questionnaire.md          system onboarding
 ├── shared/
-│   ├── system-meta.md            system name, purpose, tech stack
-│   └── c4-notation.md            C4 element rules and naming conventions
+│   ├── system-meta.md            system name, purpose, tech stack, interface formats
+│   ├── c4-notation.md            C4 element rules and naming conventions
+│   └── stage-gates.md            cross-stage quality gates and rerun policy
 └── stages/
     ├── 01-discovery/             goals, NFRs, tech decisions
     ├── 01b-flow/                 business flows, scenarios
@@ -122,7 +135,7 @@ BUBAT/
     ├── 03-container/             C4 Level 2 diagram + contracts
     ├── 04-component/             C4 Level 3 diagrams
     ├── 05-document/              final architecture doc
-    └── 06-spec/                  cavekit SPEC.md bridge
+    └── 06-spec/                  cavekit SPEC.md bridge + interface spec generation
 ```
 
 Each stage has:
@@ -142,8 +155,9 @@ Cross-stage gate rules live in `shared/stage-gates.md`.
 | Input gate | upstream outputs exist before downstream starts |
 | Stage audit gate | current stage `Audit` table passes before save |
 | Traceability gate | extracted decisions/flows/contracts/invariants cite sources |
+| Diagram gate | diagram code uses configured format; names match upstream labels |
 | ADR gate | no duplicate tech decisions on rerun; changed decisions append superseding ADR |
-| Bridge gate | `SPEC.md` constraints/invariants trace to extraction map |
+| Bridge gate | `SPEC.md` constraints/invariants trace to extraction map; interface spec TODOs documented |
 
 ---
 
@@ -165,7 +179,9 @@ Drop any existing system documentation into `raw/` before running `setup`. Claud
 
 ## Cavekit Integration
 
-Stage `06-spec` bridges BUBAT architecture outputs into a [cavekit](https://github.com/JuliusBrussee/cavekit) `SPEC.md`. No information is lost — every NFR, contract, domain invariant, and tech decision is compressed into the spec using caveman encoding.
+Stage `06-spec` bridges BUBAT architecture outputs into two categories of artifacts:
+
+**1. Cavekit SPEC.md** — zero information loss, caveman-encoded. Every NFR, contract, domain invariant, and tech decision compressed into the spec.
 
 | BUBAT Artifact | SPEC.md Section |
 |----------------|----------------|
@@ -176,9 +192,22 @@ Stage `06-spec` bridges BUBAT architecture outputs into a [cavekit](https://gith
 | BC rules, data constraints, scenario postconditions | `§V` invariants |
 | Container inventory (dependency-ordered) | `§T` tasks |
 
+**2. Interface specs** — generated from container contracts and component diagrams.
+
+| Output file | Generated when |
+|-------------|---------------|
+| `openapi.yaml` | any HTTP/HTTPS contract exists |
+| `{slug}.proto` | any gRPC contract exists |
+| `{slug}-interfaces.go` | Go in tech stack |
+| `{slug}-interfaces.ts` | TypeScript / Node.js in tech stack |
+| `{slug}-interfaces.java` | Java / Kotlin in tech stack |
+
+Format selection is auto-detected from tech stack and contract protocols, or set explicitly via `Interface formats` in `setup`.
+
 After `bridge`:
 1. Copy `stages/06-spec/output/SPEC.md` to project root
-2. Run `/ck:review` — adversarial spec review
-3. Run `/ck:build` — implement
+2. Copy interface specs (`openapi.yaml`, `.proto`, `interfaces.*`) to project as needed
+3. Run `/ck:review` — adversarial spec review
+4. Run `/ck:build` — implement
 
 Architecture changes → `update <stages>` → `bridge` → `/ck:check` → `/ck:build`
