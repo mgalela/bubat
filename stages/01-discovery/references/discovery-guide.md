@@ -26,6 +26,10 @@ Questions that shape the system discovery. Cover every topic. Record answers ver
 - At the highest level, what are the major parts of this system? (e.g., web app, API, database, worker)
 - Which parts are separately deployed? (own server, own container, own process)
 - Which parts share a deployment unit?
+- Are there functional areas owned by different teams or squads?
+- Are there any domain terms that mean different things in different areas of the system?
+  (e.g., "Customer" in sales vs. "Customer" in support -- same word, different meaning)
+- Which areas of the system change most frequently? Which are most stable?
 
 ## Existing Artifacts
 

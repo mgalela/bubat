@@ -21,6 +21,8 @@ across a single relationship. It answers:
 | Protocol | HTTPS / AMQP / gRPC / WebSocket / SQL / etc. |
 | Format | JSON / Protobuf / Avro / XML / binary |
 | Direction | Synchronous (request/response) / Asynchronous (fire-and-forget / event) |
+| Context Map Relationship | Customer-Supplier / Conformist / ACL / Shared Kernel / OHS+PL / Partnership |
+| ACL Required | Yes / No -- if Yes, name the adapter container that owns the translation |
 | Endpoint / Topic | `/api/orders` or `order.created` topic |
 | Key Request Fields | field: type -- description |
 | Key Response Fields | field: type -- description |
@@ -33,13 +35,15 @@ across a single relationship. It answers:
 ## Example
 
 ```markdown
-## API Server → Payment Gateway
+## Payment Gateway Adapter → Payment Gateway [External]
 
 | Field | Value |
 |-------|-------|
 | Protocol | HTTPS |
 | Format | JSON |
 | Direction | Synchronous (request/response) |
+| Context Map Relationship | ACL |
+| ACL Required | Yes -- Payment Gateway Adapter [Node.js] translates between internal Payment domain model and gateway's Charge/Transaction model |
 | Endpoint | `POST https://pay.example.com/v1/charge` |
 | Key Request Fields | `amount: integer` -- charge in cents; `currency: string`; `card_token: string` |
 | Key Response Fields | `charge_id: string`; `status: succeeded\|failed`; `error_code: string?` |

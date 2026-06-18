@@ -7,6 +7,11 @@ Build the C4 Level 2 Container diagram showing the major deployable units inside
 | Source | File/Location | Section/Scope | Why |
 |--------|--------------|---------------|-----|
 | Context diagram | `../02-context/output/{{SYSTEM_SLUG}}-context.md` | Full file | System boundary and external systems already established |
+| Bounded context inventory | `../01c-bounded-context/output/{{SYSTEM_SLUG}}-bounded-contexts.md` | Full file | BCs become the primary partitioning unit for containers |
+| Context map | `../01c-bounded-context/output/{{SYSTEM_SLUG}}-context-map.md` | Full file | Relationship types inform interface contracts and ACL container placement |
+| Domain entity inventory | `../01d-data-model/output/{{SYSTEM_SLUG}}-domain-entities.md` | Full file | Entity structure per BC informs data store type and partitioning |
+| Storage hints | `../01d-data-model/output/{{SYSTEM_SLUG}}-storage-hints.md` | Full file | Storage type recommendations drive data store container selection |
+| Cross-BC data dependencies | `../01d-data-model/output/{{SYSTEM_SLUG}}-data-dependencies.md` | Full file | Cross-BC projections inform which containers need their own data stores |
 | Discovery report | `../01-discovery/output/{{SYSTEM_SLUG}}-discovery.md` | "High-Level Structure" and "Technology Choices" sections | Preview containers and tech choices from discovery |
 | Key scenarios | `../01b-flow/output/{{SYSTEM_SLUG}}-scenarios.md` | Full file | Scenarios that require container-level sequence diagrams |
 | Tech decisions log | `../01-discovery/output/{{SYSTEM_SLUG}}-tech-decisions.md` | Full file | Carry forward decisions and append new ones |
@@ -18,29 +23,39 @@ Build the C4 Level 2 Container diagram showing the major deployable units inside
 
 1. Read the context diagram output to inherit the system boundary and external systems.
 2. Read the discovery high-level structure and technology choices sections for preliminary container candidates.
-3. Identify containers: ask the user to confirm or expand on the deployable units.
-4. For each container: determine its technology, responsibility, and relationships.
-5. Define interface contracts for each inter-container relationship: protocol, data format, and key fields.
-6. Pause at checkpoint -- confirm the full container list and contracts before drawing.
-7. Render the Level 2 diagram in the format from `shared/system-meta.md`.
-8. Write a short narrative (one paragraph) explaining the container breakdown.
-9. Run audit checks.
-10. Append topology and technology decisions made during this stage to the tech decisions log.
-11. For each scenario in `{slug}-scenarios.md`: render a container-level sequence diagram showing how containers collaborate to fulfil the scenario. Use container names exactly as labelled in the Level 2 diagram.
-12. Save to `output/`.
+3. Read the bounded context inventory. Map each internal BC to a container group:
+   - Minimum one service container (API or worker) + one data store per BC.
+   - BCs that share no data may share a data store only when team and operational constraints require it;
+     document the decision in the tech decisions log.
+4. For BCs with an ACL relationship in the context map: add an explicit ACL adapter container at the
+   integration boundary. Label it "[BC Name] Adapter [technology]".
+5. Identify containers: present the BC-derived container list to the user for confirmation or expansion.
+6. For each container: determine its technology, responsibility, and relationships.
+7. Define interface contracts for each inter-container relationship: protocol, data format, key fields,
+   and context map relationship type (inherited from Stage 01c).
+8. Pause at checkpoint 1 -- confirm the full container list and contracts before drawing.
+9. Render the Level 2 diagram in the format from `shared/system-meta.md`.
+10. Write a short narrative (one paragraph) explaining the container breakdown.
+11. Run audit checks.
+12. Append topology and technology decisions made during this stage to the tech decisions log.
+13. For each scenario in `{slug}-scenarios.md`: render a container-level sequence diagram showing how containers collaborate to fulfil the scenario. Use container names exactly as labelled in the Level 2 diagram.
+14. Save to `output/`.
 
 ## Checkpoints
 
 | After Step | Agent Presents | Human Decides |
 |------------|---------------|---------------|
-| Step 4 | Table: container name, technology, one-sentence responsibility, relationships | Confirm, merge, or split containers before diagram is drawn |
-| Step 5 | Interface contracts table: container pair, protocol, format, key fields | Confirm or correct contracts before diagram is drawn |
-| Step 11 | Draft sequence diagrams for each scenario | Confirm accuracy before saving |
+| Step 4 | ACL adapter containers derived from context map, with BC and relationship type | Confirm ACL placement before container list is finalised |
+| Step 5 | Table: container name, technology, one-sentence responsibility, source BC, relationships | Confirm, merge, or split containers before diagram is drawn |
+| Step 7 | Interface contracts table: container pair, protocol, format, key fields, context map type | Confirm or correct contracts before diagram is drawn |
+| Step 13 | Draft sequence diagrams for each scenario | Confirm accuracy before saving |
 
 ## Audit
 
 | Check | Pass Condition |
 |-------|---------------|
+| Every BC has containers | Each bounded context from Stage 01c maps to at least one service container and one data store |
+| ACL containers present where required | Every BC pair with ACL=Yes in the context map has an adapter container in the diagram |
 | Every container is deployable | Each element could, in principle, run in its own process or host |
 | Technology tagged | Every container has a [technology] tag in its label |
 | External systems inherited | Same external systems from Level 1 appear where they connect |
