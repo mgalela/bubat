@@ -19,6 +19,10 @@ Build the C4 Level 2 Container diagram showing the major deployable units inside
 | Level 2 rules | `references/level2-rules.md` | Full file | What belongs and does not belong at Level 2 |
 | Container patterns | `references/container-patterns.md` | Full file | Common container topologies to reference |
 
+## Stage Gate
+
+Before running this stage, apply relevant checks from `../../shared/stage-gates.md`: input gate before work starts; stage audit, placeholder, and traceability gates before saving outputs.
+
 ## Process
 
 1. Read the context diagram output to inherit the system boundary and external systems.

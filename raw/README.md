@@ -24,4 +24,4 @@ Drop existing materials here before running any stage. Run `raw route` -- Claude
 1. Drop files here
 2. Trigger: `raw route`
 3. Claude scans each file, determines relevant stage(s), writes `MANIFEST.md`
-4. Each stage reads only the files routed to it via `MANIFEST.md`
+4. Each stage reads only rows where `Stages` contains its exact stage id

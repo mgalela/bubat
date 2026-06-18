@@ -1,6 +1,8 @@
-# C4ICM
+# BUBAT
 
 Architecture documentation workspace. Document any software system through four levels of zoom using the [C4 model](https://c4model.com), then export a ready-to-use [cavekit](https://github.com/JuliusBrussee/cavekit) `SPEC.md` for implementation.
+
+Inspired by / built on ideas from [Interpreted Context Methodology](https://github.com/RinDig/Interpreted-Context-Methdology).
 
 ---
 
@@ -52,6 +54,7 @@ stages/02-context/...            → context diagram
 stages/03-container/...          → container diagram
 stages/04-component/...          → component diagrams
 stages/05-document/...           → architecture doc
+stages/06-spec/...               → cavekit SPEC.md
 ```
 
 **Export to cavekit:**
@@ -79,7 +82,7 @@ bridge
 ## Folder Structure
 
 ```
-C4ICM/
+BUBAT/
 ├── CLAUDE.md                     agent instructions
 ├── CONTEXT.md                    task routing
 ├── README.md                     this file
@@ -110,6 +113,21 @@ Each stage has:
 
 ---
 
+## Quality Gates
+
+Cross-stage gate rules live in `shared/stage-gates.md`.
+
+| Gate | Purpose |
+|------|---------|
+| Workspace gate | setup placeholders cleared; `raw/MANIFEST.md` exists |
+| Input gate | upstream outputs exist before downstream starts |
+| Stage audit gate | current stage `Audit` table passes before save |
+| Traceability gate | extracted decisions/flows/contracts/invariants cite sources |
+| ADR gate | no duplicate tech decisions on rerun; changed decisions append superseding ADR |
+| Bridge gate | `SPEC.md` constraints/invariants trace to extraction map |
+
+---
+
 ## Raw Materials
 
 Drop any existing system documentation into `raw/` before running `setup`. Claude routes each file to the correct stage automatically.
@@ -128,9 +146,9 @@ Drop any existing system documentation into `raw/` before running `setup`. Claud
 
 ## Cavekit Integration
 
-Stage `06-spec` bridges C4ICM architecture outputs into a [cavekit](https://github.com/JuliusBrussee/cavekit) `SPEC.md`. No information is lost — every NFR, contract, domain invariant, and tech decision is compressed into the spec using caveman encoding.
+Stage `06-spec` bridges BUBAT architecture outputs into a [cavekit](https://github.com/JuliusBrussee/cavekit) `SPEC.md`. No information is lost — every NFR, contract, domain invariant, and tech decision is compressed into the spec using caveman encoding.
 
-| C4ICM Artifact | SPEC.md Section |
+| BUBAT Artifact | SPEC.md Section |
 |----------------|----------------|
 | Discovery goals + purpose | `§G` goal |
 | NFRs, tech locks, compliance | `§C` constraints |

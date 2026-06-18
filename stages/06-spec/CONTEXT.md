@@ -1,6 +1,6 @@
 # Stage 06: Cavekit SPEC.md Bridge
 
-Convert all C4ICM architecture outputs into a `SPEC.md` ready for [cavekit](https://github.com/JuliusBrussee/cavekit) spec-driven development.
+Convert all BUBAT architecture outputs into a `SPEC.md` ready for [cavekit](https://github.com/JuliusBrussee/cavekit) spec-driven development.
 
 Zero information loss. Every architectural decision, constraint, interface, and invariant must survive the translation. Compress prose → caveman encoding (fragments, symbols, pipe tables). Do NOT summarize away specifics.
 
@@ -14,7 +14,9 @@ Zero information loss. Every architectural decision, constraint, interface, and 
 | Key scenarios | `../01b-flow/output/{{SYSTEM_SLUG}}-scenarios.md` | Full file | §V, §T |
 | Bounded context map | `../01c-bounded-context/output/{{SYSTEM_SLUG}}-bounded-contexts.md` | Full file | §V, §C |
 | Context map | `../01c-bounded-context/output/{{SYSTEM_SLUG}}-context-map.md` | Full file | §I, §V |
-| Domain data model | `../01d-data-model/output/{{SYSTEM_SLUG}}-data-model.md` | Full file | §V, §I |
+| Domain entity inventory | `../01d-data-model/output/{{SYSTEM_SLUG}}-domain-entities.md` | Full file | §V, §I |
+| Cross-BC data dependencies | `../01d-data-model/output/{{SYSTEM_SLUG}}-data-dependencies.md` | Full file | §I, §V |
+| Storage hints | `../01d-data-model/output/{{SYSTEM_SLUG}}-storage-hints.md` | Full file | §C, §T |
 | Container diagram + inventory | `../03-container/output/{{SYSTEM_SLUG}}-containers.md` | Full file | §I, §T |
 | Interface contracts | `../03-container/output/{{SYSTEM_SLUG}}-contracts.md` | Full file | §I |
 | Container sequences | `../03-container/output/{{SYSTEM_SLUG}}-sequences-l2.md` | Full file | §V, §T |
@@ -23,7 +25,7 @@ Zero information loss. Every architectural decision, constraint, interface, and 
 | Component sequences | `../04-component/output/{{SYSTEM_SLUG}}-sequences-l3.md` | Full file | §V |
 | System identity | `../../shared/system-meta.md` | Full file | §G, §C |
 
-Load all available inputs. If a file is missing (stage not yet run), note it as `[MISSING — run stage XX first]` in the relevant section. Do not skip sections.
+Load all available inputs. If a file is missing (stage not yet run), note it as `[MISSING — run stage XX first]` in the relevant section. Do not skip sections. Apply `../../shared/stage-gates.md` Bridge gate before saving.
 
 ## Caveman Encoding Rules
 
@@ -43,6 +45,10 @@ Apply to all prose in SPEC.md output:
 | At least = `≥` | "at least 99.9% uptime" | `≥ 99.9% uptime` |
 
 Pipe tables over prose lists. Numbers over ranges where possible. Keep: technical terms, proper nouns, version numbers, URLs, field names, status codes.
+
+## Stage Gate
+
+Before running this stage, apply relevant checks from `../../shared/stage-gates.md`: input gate before work starts; stage audit, placeholder, and traceability gates before saving outputs.
 
 ## Process
 
@@ -124,7 +130,7 @@ Status symbols: `[ ]` not started · `[~]` in progress · `[x]` done · `[!]` bl
 | Artifact | Location | Format |
 |----------|----------|--------|
 | Cavekit spec | `output/SPEC.md` | Drop this file into project root to start cavekit loop |
-| Extraction map | `output/{{SYSTEM_SLUG}}-extraction-map.md` | Traceability: which C4ICM section produced which SPEC entry |
+| Extraction map | `output/{{SYSTEM_SLUG}}-extraction-map.md` | Traceability: which BUBAT section produced which SPEC entry |
 
 ---
 
@@ -134,7 +140,7 @@ Output must follow this exact structure. Fill every section. Do not add or remov
 
 ```markdown
 # SPEC — {{SYSTEM_NAME}}
-> C4ICM bridge v1 · generated {{DATE}} · source: C4ICM/stages/06-spec/output/{{SYSTEM_SLUG}}-extraction-map.md
+> BUBAT bridge v1 · generated {{DATE}} · source: BUBAT/stages/06-spec/output/{{SYSTEM_SLUG}}-extraction-map.md
 
 ## §G GOAL
 {{one compressed line: what system does, for whom, core value}}
@@ -199,7 +205,7 @@ Output must follow this exact structure. Fill every section. Do not add or remov
 
 ```markdown
 # {{SYSTEM_SLUG}}-extraction-map.md
-<!-- Traceability: C4ICM artifact → SPEC.md entry -->
+<!-- Traceability: BUBAT artifact → SPEC.md entry -->
 
 | SPEC Entry | Source Artifact | Source Section | Verbatim Excerpt (truncated) |
 |------------|----------------|----------------|------------------------------|

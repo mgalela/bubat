@@ -13,6 +13,10 @@ partitioning (Stage 03).
 | Discovery report | `../01-discovery/output/{{SYSTEM_SLUG}}-discovery.md` | "Users", "External Systems", "High-Level Structure" sections | External systems become external BCs; user roles anchor language |
 | System identity | `../../shared/system-meta.md` | Full file | System name and diagram format |
 
+## Stage Gate
+
+Before running this stage, apply relevant checks from `../../shared/stage-gates.md`: input gate before work starts; stage audit, placeholder, and traceability gates before saving outputs.
+
 ## Process
 
 1. Read all flows and scenarios. Extract every domain noun and verb that appears.

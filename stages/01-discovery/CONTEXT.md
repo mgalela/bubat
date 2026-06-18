@@ -9,13 +9,17 @@ Gather structured information about the system by interviewing the user and pars
 | System identity | `../../shared/system-meta.md` | Full file | Baseline from setup |
 | Discovery guide | `references/discovery-guide.md` | Full file | Questions to ask and what to capture |
 | ADR template | `references/adr-template.md` | Full file | Format for every entry in the tech decisions log |
-| Raw materials | `../../raw/` | Files routed to this stage | Pre-existing docs parsed during `raw route` -- only read files listed in `raw/MANIFEST.md` under `stage: 01-discovery` |
+| Raw materials | `../../raw/` | Files routed to this stage | Pre-existing docs parsed during `raw route` -- only read rows in `raw/MANIFEST.md` where `Stages` contains `01-discovery` |
+
+## Stage Gate
+
+Before running this stage, apply relevant checks from `../../shared/stage-gates.md`: input gate before work starts; stage audit, placeholder, and traceability gates before saving outputs.
 
 ## Process
 
 1. Read `shared/system-meta.md` to confirm what was captured during setup.
 2. Read `references/discovery-guide.md` to load the full question set.
-3. Check `../../raw/MANIFEST.md` for files routed to `01-discovery`. If any exist, parse them and extract answers that map to discovery topics. Note the source file for every pre-filled answer.
+3. Check `../../raw/MANIFEST.md` for rows where `Stages` contains `01-discovery`. If any exist, parse them and extract answers that map to discovery topics. Note the source file for every pre-filled answer.
 4. If raw materials were parsed, present a summary of pre-filled topics and remaining gaps -- confirm with the user before proceeding.
 5. Ask the user only about topics not already covered -- one topic at a time, not all at once.
 6. Pause after each topic to confirm the captured information before moving on.

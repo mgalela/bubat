@@ -1,4 +1,4 @@
-# C4ICM
+# BUBAT
 
 Architecture documentation workspace using the C4 model, built on ICM conventions.
 One system through four levels of zoom: context, containers, components, and assembled document.
@@ -6,7 +6,7 @@ One system through four levels of zoom: context, containers, components, and ass
 ## Folder Map
 
 ```
-C4ICM/
+BUBAT/
 ├── CLAUDE.md                           (you are here)
 ├── CONTEXT.md                          (task routing)
 ├── raw/                                (drop source materials here -- run `raw route` to assign to stages)
@@ -16,7 +16,8 @@ C4ICM/
 │   └── questionnaire.md               (system onboarding -- run once)
 ├── shared/
 │   ├── system-meta.md                 (system name, purpose, tech stack -- populated at setup)
-│   └── c4-notation.md                 (C4 element rules and naming conventions)
+│   ├── c4-notation.md                 (C4 element rules and naming conventions)
+│   └── stage-gates.md                 (cross-stage quality gates and rerun policy)
 └── stages/
     ├── 01-discovery/                  (gather system info from stakeholders and docs)
     ├── 01b-flow/                      (capture business flows and key scenarios)
@@ -26,7 +27,7 @@ C4ICM/
     ├── 03-container/                  (C4 Level 2 -- container diagram)
     ├── 04-component/                  (C4 Level 3 -- component diagrams per container)
     ├── 05-document/                   (assemble final architecture document)
-    └── 06-spec/                       (bridge: convert C4ICM outputs → cavekit SPEC.md)
+    └── 06-spec/                       (bridge: convert BUBAT outputs → cavekit SPEC.md)
 ```
 
 ## Triggers
@@ -38,14 +39,14 @@ C4ICM/
 | `status` | Show pipeline completion for all stages |
 | `diagram <stage>` | Re-render diagrams for a specific stage without re-running the full stage |
 | `update <stage(s)>` | Re-run one or more stages after system changes -- e.g. `update 03` or `update 03 04 05` |
-| `bridge` | Run stage 06-spec -- converts all C4ICM outputs into a cavekit SPEC.md |
+| `bridge` | Run stage 06-spec -- converts all BUBAT outputs into a cavekit SPEC.md |
 
 ### How `status` works
 
 Scan `stages/*/output/` folders. COMPLETE if files exist beyond .gitkeep, PENDING otherwise.
 
 ```
-Pipeline Status: C4ICM
+Pipeline Status: BUBAT
 
   [01-discovery] --> [01b-flow] --> [01c-bounded-context] --> [01d-data-model] --> [02-context] --> [03-container] --> [04-component] --> [05-document] --> [06-spec]
       STATUS            STATUS               STATUS                  STATUS              STATUS           STATUS              STATUS             STATUS            STATUS
@@ -84,9 +85,11 @@ Pipeline Status: C4ICM
 | Deployment units, services, databases, messaging, infrastructure | `03-container` |
 | API specs, component diagrams, internal module structure, code-level design | `04-component` |
 | Final architecture docs, decision summaries, full system description | `05-document` |
+| Cavekit specs, implementation task lists, build plans | `06-spec` |
 
 4. A file may route to multiple stages if it spans topics -- list all relevant stages.
-5. Write `raw/MANIFEST.md` using this format:
+5. Stage matching uses table column `Stages`; each stage may read only rows where `Stages` contains its exact stage id (for example `01-discovery`).
+6. Write `raw/MANIFEST.md` using this format:
 
 ```markdown
 # raw/MANIFEST.md
@@ -98,7 +101,19 @@ Pipeline Status: C4ICM
 | spec.yaml | 04-component | OpenAPI spec -- routes and schemas only |
 ```
 
-6. Present the manifest to the user for review. Ask if any routing looks wrong before saving.
+7. Present the manifest to the user for review. Ask if any routing looks wrong before saving.
+
+## Stage Gates
+
+Before starting any stage, read `shared/stage-gates.md` and apply relevant gates:
+
+1. Workspace gate before first stage.
+2. Input gate before every stage.
+3. Stage audit + placeholder + traceability gates before saving outputs.
+4. ADR gate before appending to tech decisions log.
+5. Bridge gate before saving Stage 06 artifacts.
+
+Downstream stages must not run when required upstream artifacts are missing, except Stage 06 may emit explicit `[MISSING — run stage XX first]` markers by design.
 
 ## Routing
 
@@ -129,5 +144,5 @@ For every stage: check `raw/MANIFEST.md` first. Load raw files listed under the 
 | Context diagram | `stages/01c-bounded-context/output/`, `stages/01-discovery/output/`, `shared/c4-notation.md`, `stages/02-context/references/` | `stages/03-container/` through `stages/05-document/` |
 | Container diagram | `stages/02-context/output/`, `stages/01d-data-model/output/`, `stages/01c-bounded-context/output/`, `stages/01b-flow/output/`, `shared/c4-notation.md`, `stages/03-container/references/` | `stages/04-component/`, `stages/05-document/` |
 | Component diagrams | `stages/03-container/output/`, `shared/c4-notation.md`, `stages/04-component/references/` | `stages/05-document/` |
-| Final document | `stages/01b-flow/output/`, `stages/02-context/output/`, `stages/03-container/output/`, `stages/04-component/output/`, `stages/05-document/references/` | `stages/01-discovery/` |
+| Final document | `stages/01-discovery/output/`, `stages/01b-flow/output/`, `stages/02-context/output/`, `stages/03-container/output/`, `stages/04-component/output/`, `stages/05-document/references/` | `stages/06-spec/` |
 | Cavekit SPEC.md | ALL `stages/01-discovery/output/` through `stages/04-component/output/`, `shared/system-meta.md` | `stages/05-document/` (use source stages directly, not assembled doc) |

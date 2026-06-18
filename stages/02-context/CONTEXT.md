@@ -14,6 +14,10 @@ Build the C4 Level 1 System Context diagram showing the system, its users, and e
 | System identity | `../../shared/system-meta.md` | Full file | System name and diagram format preference |
 | Level 1 rules | `references/level1-rules.md` | Full file | What belongs and does not belong at Level 1 |
 
+## Stage Gate
+
+Before running this stage, apply relevant checks from `../../shared/stage-gates.md`: input gate before work starts; stage audit, placeholder, and traceability gates before saving outputs.
+
 ## Process
 
 1. Read the discovery report to extract: system name, all user roles, all external systems.

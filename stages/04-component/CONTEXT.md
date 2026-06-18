@@ -14,6 +14,10 @@ Build C4 Level 3 Component diagrams for each container selected for deep-dive.
 | Level 3 rules | `references/level3-rules.md` | Full file | What belongs and does not belong at Level 3 |
 | Component patterns | `references/component-patterns.md` | Full file | Common component structures to reference |
 
+## Stage Gate
+
+Before running this stage, apply relevant checks from `../../shared/stage-gates.md`: input gate before work starts; stage audit, placeholder, and traceability gates before saving outputs.
+
 ## Process
 
 1. Read the container diagram output to identify all containers.
