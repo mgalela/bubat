@@ -1,0 +1,8 @@
+.git/
+.claude/
+node_modules/
+example/
+ref-ICM/
+C4ICM.zip
+stages/*/output/*
+!stages/*/output/.gitkeep
