@@ -35,6 +35,11 @@ Then confirm: "Setup complete. Run `status` to check where you are in the pipeli
    - Options: Internal engineering team, new engineers onboarding, external stakeholders, all of the above
    - Default: Internal engineering team
 
+8. Which interface spec formats should Stage 06 generate? (Select all that apply.)
+   - Options: OpenAPI YAML (for HTTP/REST contracts), gRPC proto3 (for gRPC contracts), Go interfaces, TypeScript interfaces, Java interfaces, None — skip interface generation
+   - Default: Auto-detect from tech stack and contract protocols
+   - Note: "Auto-detect" reads protocols from contracts and language from tech stack. Override here only if auto-detect would pick the wrong formats.
+
 ---
 
 ## After Collecting Answers

@@ -24,3 +24,4 @@ Populated during `setup`. Do not edit manually -- run `setup` to update.
 
 - **Diagram format:** {{DIAGRAM_FORMAT}}
 - **Audience:** {{AUDIENCE}}
+- **Interface formats:** {{INTERFACE_FORMATS}}

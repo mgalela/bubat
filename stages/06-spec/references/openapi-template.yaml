@@ -1,0 +1,220 @@
+openapi: "3.1.0"
+
+# ============================================================
+# BUBAT Stage 06 — OpenAPI generation template
+# Generated from: stages/03-container/output/{slug}-contracts.md
+# One path entry per HTTP contract row. Fill from extraction rules.
+# ============================================================
+
+info:
+  title: "{{SYSTEM_NAME}} API"
+  version: "0.1.0"
+  description: |
+    Auto-generated skeleton from BUBAT Stage 06 bridge.
+    Review and extend before publishing.
+
+servers:
+  - url: "https://{{HOST}}/{{BASE_PATH}}"
+    description: "Production"
+  - url: "http://localhost:{{PORT}}/{{BASE_PATH}}"
+    description: "Local development"
+
+# ============================================================
+# Security Schemes
+# Add one entry per auth type found in contracts.md
+# ============================================================
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    MutualTLS:
+      type: mutualTLS
+
+  # ============================================================
+  # Schemas — one per Key Request/Response fields block
+  # Name: {Consumer}{Endpoint}Request / {Consumer}{Endpoint}Response
+  # ============================================================
+  schemas:
+    # -- PATTERN: Request body --
+    ExampleRequest:
+      type: object
+      required:
+        - field_one        # required = non-nullable field in contracts
+      properties:
+        field_one:
+          type: string
+          description: "Derive from Key Request Fields"
+        field_two:
+          type: integer
+          description: "Derive from Key Request Fields"
+
+    # -- PATTERN: Response body --
+    ExampleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: ["pending", "success", "failed"]    # derive from contract response fields
+
+    # -- PATTERN: Error body (standard) --
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+
+# ============================================================
+# Paths — generate one block per contract row
+# ============================================================
+paths:
+
+  # -- PATTERN: POST endpoint --
+  /example:
+    post:
+      operationId: createExample
+      summary: "Derive from Endpoint + Consumer label"
+      tags:
+        - ExampleTag                              # group by container or bounded context
+      security:
+        - BearerAuth: []                          # match Auth field in contract
+      x-sla: "≤{{SLA_MS}}ms"                     # from SLA / Timeout field
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExampleRequest"
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExampleResponse"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Unauthorized"
+        "422":
+          description: "Unprocessable entity"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -- PATTERN: GET by ID --
+  /example/{id}:
+    get:
+      operationId: getExampleById
+      summary: "Derive from Endpoint + Consumer label"
+      tags:
+        - ExampleTag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExampleResponse"
+        "404":
+          description: "Not found"
+        "500":
+          description: "Internal server error"
+
+  # -- PATTERN: PUT update --
+    put:
+      operationId: updateExample
+      tags:
+        - ExampleTag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExampleRequest"
+      responses:
+        "200":
+          description: "Updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExampleResponse"
+        "404":
+          description: "Not found"
+        "500":
+          description: "Internal server error"
+
+  # -- PATTERN: DELETE --
+    delete:
+      operationId: deleteExample
+      tags:
+        - ExampleTag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "Deleted"
+        "404":
+          description: "Not found"
+        "500":
+          description: "Internal server error"
+
+# ============================================================
+# Async events — document alongside REST if system uses both
+# Use x-asyncapi extension or separate AsyncAPI spec if needed
+# ============================================================
+# x-events:
+#   topic_name:
+#     producer: "ContainerName"
+#     consumer: "ContainerName"
+#     format: JSON
+#     key_fields:
+#       - field: type

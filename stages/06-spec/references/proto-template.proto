@@ -1,0 +1,153 @@
+// BUBAT Stage 06 — proto3 generation template
+// Generated from: stages/03-container/output/{slug}-contracts.md (gRPC rows)
+// One service block per gRPC contract. Fill from extraction rules.
+// Review field numbers before use — they must be stable across versions.
+
+syntax = "proto3";
+
+package {{SYSTEM_SLUG}}.v1;
+
+option go_package = "github.com/{{ORG}}/{{SYSTEM_SLUG}}/gen/go/{{SYSTEM_SLUG}}/v1;{{SYSTEM_SLUG}}v1";
+option java_package = "com.{{ORG}}.{{SYSTEM_SLUG}}.v1";
+option java_multiple_files = true;
+
+// ============================================================
+// PATTERN: Import common types
+// Use google.rpc.Status for rich errors (preferred over custom error messages)
+// ============================================================
+import "google/rpc/status.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// ============================================================
+// PATTERN: Service definition
+// Name = Producer container name (CamelCase, drop tech suffix)
+// One rpc per Endpoint / Topic row in contracts.md
+// ============================================================
+
+// ExampleService — derive name from Producer label in contract
+service ExampleService {
+
+  // -- Unary RPC (Synchronous request/response) --
+  // Derive method name from Endpoint field (e.g., /order.create → CreateOrder)
+  rpc CreateExample(CreateExampleRequest) returns (CreateExampleResponse);
+
+  rpc GetExample(GetExampleRequest) returns (GetExampleResponse);
+
+  rpc UpdateExample(UpdateExampleRequest) returns (UpdateExampleResponse);
+
+  rpc DeleteExample(DeleteExampleRequest) returns (google.protobuf.Empty);
+
+  // -- Server streaming (producer pushes multiple responses) --
+  rpc ListExamples(ListExamplesRequest) returns (stream ExampleItem);
+
+  // -- Client streaming (consumer sends multiple requests) --
+  rpc BatchCreateExamples(stream CreateExampleRequest) returns (BatchCreateExamplesResponse);
+
+  // -- Bidirectional streaming --
+  rpc SyncExamples(stream SyncExampleRequest) returns (stream SyncExampleResponse);
+}
+
+// ============================================================
+// PATTERN: Request messages
+// Fields: derive from Key Request Fields in contracts.md
+// Field numbers: start at 1, never reuse or reorder
+// ============================================================
+
+message CreateExampleRequest {
+  string name = 1;         // required field — matches contract Key Request Fields
+  int64  amount = 2;       // required field
+  string currency = 3;     // optional field — use proto3 default (empty string = absent)
+}
+
+message GetExampleRequest {
+  string id = 1;
+}
+
+message UpdateExampleRequest {
+  string id = 1;
+  string name = 2;
+  int64  amount = 3;
+}
+
+message DeleteExampleRequest {
+  string id = 1;
+}
+
+message ListExamplesRequest {
+  int32  page_size  = 1;
+  string page_token = 2;   // cursor-based pagination preferred
+}
+
+message SyncExampleRequest {
+  string client_id = 1;
+  bytes  payload   = 2;
+}
+
+// ============================================================
+// PATTERN: Response messages
+// Fields: derive from Key Response Fields in contracts.md
+// ============================================================
+
+message CreateExampleResponse {
+  string  id         = 1;
+  string  status     = 2;   // use enum below if status is finite set
+  google.protobuf.Timestamp created_at = 3;
+}
+
+message GetExampleResponse {
+  ExampleItem item = 1;
+}
+
+message UpdateExampleResponse {
+  ExampleItem item = 1;
+}
+
+message BatchCreateExamplesResponse {
+  repeated string ids          = 1;
+  int32           success_count = 2;
+  int32           failure_count = 3;
+  repeated google.rpc.Status errors = 4;  // per-item errors
+}
+
+message ListExamplesRequest {}  // placeholder — fill from contract
+
+message SyncExampleResponse {
+  string event_type = 1;
+  bytes  payload    = 2;
+}
+
+// ============================================================
+// PATTERN: Shared / nested messages
+// ============================================================
+
+message ExampleItem {
+  string   id         = 1;
+  string   name       = 2;
+  ExStatus status     = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// ============================================================
+// PATTERN: Enums
+// Always include UNSPECIFIED at 0 — required by proto3 style guide
+// ============================================================
+
+enum ExStatus {
+  EX_STATUS_UNSPECIFIED = 0;
+  EX_STATUS_PENDING     = 1;
+  EX_STATUS_ACTIVE      = 2;
+  EX_STATUS_INACTIVE    = 3;
+}
+
+// ============================================================
+// PATTERN: Error details (alternative to google.rpc.Status)
+// Use only if richer error payloads are needed beyond status codes
+// ============================================================
+
+message ExampleError {
+  string code    = 1;   // machine-readable error code
+  string message = 2;   // human-readable message
+  string field   = 3;   // field that caused the error (validation errors)
+}

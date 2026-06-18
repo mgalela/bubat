@@ -27,7 +27,7 @@ BUBAT/
     ├── 03-container/                  (C4 Level 2 -- container diagram)
     ├── 04-component/                  (C4 Level 3 -- component diagrams per container)
     ├── 05-document/                   (assemble final architecture document)
-    └── 06-spec/                       (bridge: convert BUBAT outputs → cavekit SPEC.md)
+    └── 06-spec/                       (bridge: convert BUBAT outputs → cavekit SPEC.md + interface specs)
 ```
 
 ## Triggers
@@ -39,7 +39,7 @@ BUBAT/
 | `status`            | Show pipeline completion for all stages                                                 |
 | `diagram <stage>`   | Re-render diagrams for a specific stage without re-running the full stage               |
 | `update <stage(s)>` | Re-run one or more stages after system changes -- e.g. `update 03` or `update 03 04 05` |
-| `bridge` | Run stage 06-spec -- converts all BUBAT outputs into a cavekit SPEC.md |
+| `bridge`            | Run stage 06-spec -- converts all BUBAT outputs into cavekit SPEC.md + interface specs  |
 
 ### How `status` works
 
@@ -75,17 +75,17 @@ Pipeline Status: BUBAT
 2. For each file, read or inspect its content (parse text-based formats; describe binary/image formats by filename and extension).
 3. Determine which stage(s) the file is most relevant to using this routing table:
 
-| Content signals | Route to stage |
-|-----------------|---------------|
-| Business goals, problem statement, stakeholders, high-level requirements, NFRs, tech stack | `01-discovery` |
-| Business processes, user journeys, workflows, use cases, scenarios | `01b-flow` |
-| Domain model, bounded contexts, ubiquitous language, context map | `01c-bounded-context` |
-| Entity diagrams, ER diagrams, data dictionaries, schema descriptions, attribute lists | `01d-data-model` |
-| System landscape, external integrations, system-level diagrams | `02-context` |
-| Deployment units, services, databases, messaging, infrastructure | `03-container` |
-| API specs, component diagrams, internal module structure, code-level design | `04-component` |
-| Final architecture docs, decision summaries, full system description | `05-document` |
-| Cavekit specs, implementation task lists, build plans | `06-spec` |
+| Content signals                                                                            | Route to stage        |
+| ------------------------------------------------------------------------------------------ | --------------------- |
+| Business goals, problem statement, stakeholders, high-level requirements, NFRs, tech stack | `01-discovery`        |
+| Business processes, user journeys, workflows, use cases, scenarios                         | `01b-flow`            |
+| Domain model, bounded contexts, ubiquitous language, context map                           | `01c-bounded-context` |
+| Entity diagrams, ER diagrams, data dictionaries, schema descriptions, attribute lists      | `01d-data-model`      |
+| System landscape, external integrations, system-level diagrams                             | `02-context`          |
+| Deployment units, services, databases, messaging, infrastructure                           | `03-container`        |
+| API specs, component diagrams, internal module structure, code-level design                | `04-component`        |
+| Final architecture docs, decision summaries, full system description                       | `05-document`         |
+| Cavekit specs, implementation task lists, build plans, OpenAPI/proto/interface skeletons   | `06-spec`             |
 
 4. A file may route to multiple stages if it spans topics -- list all relevant stages.
 5. Stage matching uses table column `Stages`; each stage may read only rows where `Stages` contains its exact stage id (for example `01-discovery`).
@@ -123,27 +123,27 @@ Downstream stages must not run when required upstream artifacts are missing, exc
 | Gather system information                      | `stages/01-discovery/CONTEXT.md`        |
 | Capture business flows and scenarios           | `stages/01b-flow/CONTEXT.md`            |
 | Map bounded contexts and context relationships | `stages/01c-bounded-context/CONTEXT.md` |
-| Design domain data model | `stages/01d-data-model/CONTEXT.md` |
-| Build C4 Level 1 diagram | `stages/02-context/CONTEXT.md` |
-| Build C4 Level 2 diagram | `stages/03-container/CONTEXT.md` |
-| Build C4 Level 3 diagrams | `stages/04-component/CONTEXT.md` |
-| Assemble architecture doc | `stages/05-document/CONTEXT.md` |
-| Generate cavekit SPEC.md | `stages/06-spec/CONTEXT.md` |
-| Re-render a diagram only | Use `diagram <stage>` trigger |
-| Re-run after system changes | Use `update <stage(s)>` trigger |
+| Design domain data model                       | `stages/01d-data-model/CONTEXT.md`      |
+| Build C4 Level 1 diagram                       | `stages/02-context/CONTEXT.md`          |
+| Build C4 Level 2 diagram                       | `stages/03-container/CONTEXT.md`        |
+| Build C4 Level 3 diagrams                      | `stages/04-component/CONTEXT.md`        |
+| Assemble architecture doc                      | `stages/05-document/CONTEXT.md`         |
+| Generate cavekit SPEC.md + interface specs     | `stages/06-spec/CONTEXT.md`             |
+| Re-render a diagram only                       | Use `diagram <stage>` trigger           |
+| Re-run after system changes                    | Use `update <stage(s)>` trigger         |
 
 ## What to Load
 
 For every stage: check `raw/MANIFEST.md` first. Load raw files listed under the matching stage alongside the normal inputs below.
 
-| Task | Load These | Do NOT Load |
-|------|-----------|-------------|
-| Discovery | `shared/system-meta.md`, `stages/01-discovery/references/discovery-guide.md`, `stages/01-discovery/references/adr-template.md` | `stages/01b-flow/` through `stages/05-document/` |
-| Business flows | `stages/01-discovery/output/`, `shared/system-meta.md`, `stages/01b-flow/references/` | `stages/01c-bounded-context/` through `stages/05-document/` |
-| Bounded context map | `stages/01b-flow/output/`, `stages/01-discovery/output/`, `shared/system-meta.md`, `stages/01c-bounded-context/references/` | `stages/01d-data-model/` through `stages/05-document/` |
-| Domain data model | `stages/01c-bounded-context/output/`, `stages/01b-flow/output/`, `shared/system-meta.md`, `stages/01d-data-model/references/` | `stages/02-context/` through `stages/05-document/` |
-| Context diagram | `stages/01c-bounded-context/output/`, `stages/01-discovery/output/`, `shared/c4-notation.md`, `stages/02-context/references/` | `stages/03-container/` through `stages/05-document/` |
-| Container diagram | `stages/02-context/output/`, `stages/01d-data-model/output/`, `stages/01c-bounded-context/output/`, `stages/01b-flow/output/`, `shared/c4-notation.md`, `stages/03-container/references/` | `stages/04-component/`, `stages/05-document/` |
-| Component diagrams | `stages/03-container/output/`, `shared/c4-notation.md`, `stages/04-component/references/` | `stages/05-document/` |
-| Final document | `stages/01-discovery/output/`, `stages/01b-flow/output/`, `stages/02-context/output/`, `stages/03-container/output/`, `stages/04-component/output/`, `stages/05-document/references/` | `stages/06-spec/` |
-| Cavekit SPEC.md | ALL `stages/01-discovery/output/` through `stages/04-component/output/`, `shared/system-meta.md` | `stages/05-document/` (use source stages directly, not assembled doc) |
+| Task                | Load These                                                                                                                                                                                | Do NOT Load                                                 |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Discovery           | `shared/system-meta.md`, `stages/01-discovery/references/discovery-guide.md`, `stages/01-discovery/references/adr-template.md`                                                            | `stages/01b-flow/` through `stages/05-document/`            |
+| Business flows      | `stages/01-discovery/output/`, `shared/system-meta.md`, `stages/01b-flow/references/`                                                                                                     | `stages/01c-bounded-context/` through `stages/05-document/` |
+| Bounded context map | `stages/01b-flow/output/`, `stages/01-discovery/output/`, `shared/system-meta.md`, `stages/01c-bounded-context/references/`                                                               | `stages/01d-data-model/` through `stages/05-document/`      |
+| Domain data model   | `stages/01c-bounded-context/output/`, `stages/01b-flow/output/`, `shared/system-meta.md`, `stages/01d-data-model/references/`                                                             | `stages/02-context/` through `stages/05-document/`          |
+| Context diagram     | `stages/01c-bounded-context/output/`, `stages/01-discovery/output/`, `shared/c4-notation.md`, `stages/02-context/references/`                                                             | `stages/03-container/` through `stages/05-document/`        |
+| Container diagram   | `stages/02-context/output/`, `stages/01d-data-model/output/`, `stages/01c-bounded-context/output/`, `stages/01b-flow/output/`, `shared/c4-notation.md`, `stages/03-container/references/` | `stages/04-component/`, `stages/05-document/`               |
+| Component diagrams  | `stages/03-container/output/`, `shared/c4-notation.md`, `stages/04-component/references/`                                                                                                 | `stages/05-document/`                                       |
+| Final document      | `stages/01-discovery/output/`, `stages/01b-flow/output/`, `stages/02-context/output/`, `stages/03-container/output/`, `stages/04-component/output/`, `stages/05-document/references/`    | `stages/06-spec/`                                           |
+| Cavekit SPEC.md + interface specs | ALL `stages/01-discovery/output/` through `stages/04-component/output/`, `shared/system-meta.md`, `stages/06-spec/references/` | `stages/05-document/` (use source stages directly) |
