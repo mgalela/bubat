@@ -14,6 +14,10 @@ Output feeds container partitioning (Stage 03) and repository design (Stage 04).
 | Entity guide | `references/data-model-guide.md` | Full file | Rules for extracting entities from aggregates |
 | Entity format | `references/entity-format.md` | Full file | Format for attribute tables and ERD diagrams |
 
+## Stage Gate
+
+Before running this stage, apply relevant checks from `../../shared/stage-gates.md`: input gate before work starts; stage audit, placeholder, and traceability gates before saving outputs.
+
 ## Process
 
 1. Read the BC inventory. For each BC, list its aggregates.

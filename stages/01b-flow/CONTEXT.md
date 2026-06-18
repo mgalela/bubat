@@ -10,6 +10,10 @@ These flows inform structural decisions in Stages 03-04 and become the source fo
 | Discovery report | `../01-discovery/output/{{SYSTEM_SLUG}}-discovery.md` | "Users", "External Systems", "System Boundary" sections | Source of actors and system boundary |
 | System identity | `../../shared/system-meta.md` | Full file | System name and diagram format |
 
+## Stage Gate
+
+Before running this stage, apply relevant checks from `../../shared/stage-gates.md`: input gate before work starts; stage audit, placeholder, and traceability gates before saving outputs.
+
 ## Process
 
 1. Read the discovery report to identify all user roles, external systems, and the system boundary.

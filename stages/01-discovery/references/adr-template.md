@@ -75,14 +75,14 @@ One short paragraph.
 
 ## Field Rules
 
-| Field            | Rule                                                                                              |
-| ---------------- | ------------------------------------------------------------------------------------------------- |
-| **Title**        | Imperative, ≤10 words. "Use PostgreSQL for primary storage." Not "Database selection."            |
-| **Date**         | ISO 8601: `YYYY-MM-DD`. Use the date the decision was made, not when it was written.              |
-| **Stage**        | The BUBAT stage where this decision surfaced. Technology choices from discovery → `01-discovery`. |
-| **Status**       | Start `Proposed` if not yet confirmed by a human. Set to `Accepted` when confirmed.               |
-| **Context**      | Forces only — no solution. A reader should understand _why_ without reading the decision.         |
-| **Decision**     | One clear statement. Avoid "we decided to consider" — decide or escalate.                         |
+| Field | Rule |
+|-------|------|
+| **Title** | Imperative, ≤10 words. "Use PostgreSQL for primary storage." Not "Database selection." |
+| **Date** | ISO 8601: `YYYY-MM-DD`. Use the date the decision was made, not when it was written. |
+| **Stage** | The BUBAT stage where this decision surfaced. Technology choices from discovery → `01-discovery`. |
+| **Status** | Start `Proposed` if not yet confirmed by a human. Set to `Accepted` when confirmed. |
+| **Context** | Forces only — no solution. A reader should understand *why* without reading the decision. |
+| **Decision** | One clear statement. Avoid "we decided to consider" — decide or escalate. |
 | **Alternatives** | At least one row. "No alternatives considered" is a smell — record what was implicitly ruled out. |
 | **Consequences** | Honest. Negative consequences are expected; hiding them undermines the log's value.               |
 
@@ -96,6 +96,17 @@ One short paragraph.
 | `Accepted`              | Confirmed and in effect                                           |
 | `Deprecated`            | No longer relevant; system moved on but decision was not replaced |
 | `Superseded by ADR-NNN` | Replaced by a later decision — link the new ADR number            |
+
+---
+
+## Rerun / Duplicate Policy
+
+Before appending new ADR during `update` or rerun:
+
+1. Search existing log for same **Stage** + ADR title/decision.
+2. If unchanged, do not append duplicate ADR.
+3. If changed, append next ADR number and set previous decision status to `Superseded by ADR-NNN` only if user explicitly allows editing historical status; otherwise mention `Supersedes: ADR-NNN` in new ADR Context.
+4. Never create multiple active ADRs for same stage + same decision topic.
 
 ---
 

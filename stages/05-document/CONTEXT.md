@@ -20,6 +20,10 @@ Assemble all C4 levels into one coherent architecture document for the target au
 | System identity | `../../shared/system-meta.md` | Full file | Title, audience, purpose |
 | Doc template | `references/doc-template.md` | Full file | Document structure and writing rules |
 
+## Stage Gate
+
+Before running this stage, apply relevant checks from `../../shared/stage-gates.md`: input gate before work starts; stage audit, placeholder, and traceability gates before saving outputs.
+
 ## Process
 
 1. Read all stage outputs and `shared/system-meta.md`.
@@ -35,15 +39,16 @@ Assemble all C4 levels into one coherent architecture document for the target au
 11. Write the "Tech Stack Rationale" section from technology choices in the tech decisions log.
 12. Write the "Key Architectural Decisions" section: draw from the full tech decisions log, select 5-10 most significant decisions with rationale and tradeoffs.
 13. Write the "Open Questions" section from any unresolved items in the discovery report.
-14. Pause at checkpoint -- review structure before finalization.
-15. Run audit checks.
-16. Save to `output/`.
+14. Add a Traceability section: Flow → Scenario → Bounded Context → Container → Component → Contract.
+15. Pause at checkpoint -- review structure before finalization.
+16. Run audit checks and `../../shared/stage-gates.md` traceability gate.
+17. Save to `output/`.
 
 ## Checkpoints
 
 | After Step | Agent Presents | Human Decides |
 |------------|---------------|---------------|
-| Step 13 | Outline of all sections with word counts | Add, remove, or reorder sections; flag any missing context |
+| Step 15 | Outline of all sections with word counts | Add, remove, or reorder sections; flag any missing context |
 
 ## Audit
 
@@ -58,6 +63,7 @@ Assemble all C4 levels into one coherent architecture document for the target au
 | Audience-appropriate | Technical depth matches audience defined in system-meta.md |
 | No orphaned diagrams | Every diagram has an explanatory narrative immediately following it |
 | Decisions documented | At least 5 architectural decisions with rationale and tradeoffs drawn from tech-decisions log |
+| Traceability complete | Traceability section links Flow → Scenario → Bounded Context → Container → Component → Contract, with `[N/A]` only where justified |
 | No placeholders remain | No {{PLACEHOLDER}} strings in the final document |
 | Document is scannable | Section headings form a readable outline on their own |
 
