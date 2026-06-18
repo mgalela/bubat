@@ -39,6 +39,7 @@ BUBAT/
 | `status`            | Show pipeline completion for all stages                                                 |
 | `diagram <stage>`   | Re-render diagrams for a specific stage without re-running the full stage               |
 | `update <stage(s)>` | Re-run one or more stages after system changes -- e.g. `update 03` or `update 03 04 05` |
+| `triage <idea>`     | Identify which stage(s) a new idea belongs to and which downstream stages are affected   |
 | `bridge`            | Run stage 06-spec -- converts all BUBAT outputs into cavekit SPEC.md + interface specs  |
 
 ### How `status` works
@@ -59,6 +60,48 @@ Pipeline Status: BUBAT
 3. Re-render only the diagram block(s) using the format in `shared/system-meta.md`.
 4. Replace the diagram block(s) in the artifact. Preserve all narrative, tables, and other content.
 5. Confirm: "Diagram re-rendered for Stage XX. No other content changed."
+
+### How `triage` works
+
+1. Read the idea description from the user.
+2. Map it to one or more **entry stages** using the signal table below. An idea may have multiple entry stages if it spans topics.
+3. Determine **cascade stages**: all stages downstream of the highest entry stage in the pipeline order.
+4. Check each cascade stage: if a stage's output artifact does not reference concepts touched by the idea, mark it as **likely unaffected** and exclude it from the minimum update set.
+5. Present the triage report:
+
+```
+Triage: "<idea description>"
+
+  Entry stage(s)   →  <stage-id>: <reason>
+  Cascade stages   →  <stage-id>: AFFECTED / likely unaffected
+  Safe (upstream)  →  <stage-ids>
+
+  Minimum update:  update <stage-ids in pipeline order>
+  Proceed? [y/n]
+```
+
+6. If user confirms (`y`), run `update <minimum update set>` automatically.
+7. If user declines (`n`), leave all artifacts unchanged.
+
+#### Triage signal table
+
+| Idea signals                                                                              | Entry stage           |
+| ----------------------------------------------------------------------------------------- | --------------------- |
+| New/changed stakeholder, user role, actor, system goal, NFR, high-level requirement      | `01-discovery`        |
+| New/changed business process, user journey, workflow, use case, scenario                 | `01b-flow`            |
+| New/changed domain concept, bounded context, ubiquitous language term, context boundary  | `01c-bounded-context` |
+| New/changed entity, aggregate, attribute, data relationship, storage type                | `01d-data-model`      |
+| New/changed external system integration, system-level actor or dependency                | `02-context`          |
+| New/changed service, database, message broker, deployment unit, infrastructure component | `03-container`        |
+| New/changed API, internal module, component interaction, code-level design               | `04-component`        |
+
+#### Pipeline order (for cascade traversal)
+
+```
+01-discovery → 01b-flow → 01c-bounded-context → 01d-data-model → 02-context → 03-container → 04-component → 05-document → 06-spec
+```
+
+Cascade always includes `05-document` and `06-spec` when any stage 01–04-component is affected, because those stages aggregate all upstream content.
 
 ### How `update` works
 
@@ -131,6 +174,7 @@ Downstream stages must not run when required upstream artifacts are missing, exc
 | Generate cavekit SPEC.md + interface specs     | `stages/06-spec/CONTEXT.md`             |
 | Re-render a diagram only                       | Use `diagram <stage>` trigger           |
 | Re-run after system changes                    | Use `update <stage(s)>` trigger         |
+| Identify impact of a new idea                  | Use `triage <idea>` trigger             |
 
 ## What to Load
 
