@@ -30,6 +30,25 @@ raw/ → setup → 01-discovery → 01b-flow → 01c-bounded-context → 01d-dat
 
 ---
 
+## Install
+
+**Standalone workspace** (open the created directory in Claude Code):
+```bash
+npx create-bubat my-arch
+```
+
+**Embed in existing project** (patches paths, adds `@import` hint for project `CLAUDE.md`):
+```bash
+npx create-bubat --dir .bubat
+```
+
+Then add the printed line to your project `CLAUDE.md`:
+```
+@.bubat/CLAUDE.md
+```
+
+---
+
 ## Quickstart
 
 **New system from scratch:**

@@ -1,0 +1,23 @@
+{
+  "name": "create-bubat",
+  "version": "1.0.0",
+  "description": "Scaffold BUBAT architecture documentation workspace for Claude Code",
+  "bin": {
+    "create-bubat": "./bin/create.js"
+  },
+  "files": [
+    "bin/",
+    "CLAUDE.md",
+    "CONTEXT.md",
+    "README.md",
+    "raw/",
+    "setup/",
+    "shared/",
+    "stages/"
+  ],
+  "keywords": ["claude-code", "architecture", "c4", "documentation", "bubat"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=16"
+  }
+}
