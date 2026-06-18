@@ -75,27 +75,27 @@ One short paragraph.
 
 ## Field Rules
 
-| Field | Rule |
-|-------|------|
-| **Title** | Imperative, ≤10 words. "Use PostgreSQL for primary storage." Not "Database selection." |
-| **Date** | ISO 8601: `YYYY-MM-DD`. Use the date the decision was made, not when it was written. |
-| **Stage** | The C4ICM stage where this decision surfaced. Technology choices from discovery → `01-discovery`. |
-| **Status** | Start `Proposed` if not yet confirmed by a human. Set to `Accepted` when confirmed. |
-| **Context** | Forces only — no solution. A reader should understand *why* without reading the decision. |
-| **Decision** | One clear statement. Avoid "we decided to consider" — decide or escalate. |
+| Field            | Rule                                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------------------- |
+| **Title**        | Imperative, ≤10 words. "Use PostgreSQL for primary storage." Not "Database selection."            |
+| **Date**         | ISO 8601: `YYYY-MM-DD`. Use the date the decision was made, not when it was written.              |
+| **Stage**        | The BUBAT stage where this decision surfaced. Technology choices from discovery → `01-discovery`. |
+| **Status**       | Start `Proposed` if not yet confirmed by a human. Set to `Accepted` when confirmed.               |
+| **Context**      | Forces only — no solution. A reader should understand _why_ without reading the decision.         |
+| **Decision**     | One clear statement. Avoid "we decided to consider" — decide or escalate.                         |
 | **Alternatives** | At least one row. "No alternatives considered" is a smell — record what was implicitly ruled out. |
-| **Consequences** | Honest. Negative consequences are expected; hiding them undermines the log's value. |
+| **Consequences** | Honest. Negative consequences are expected; hiding them undermines the log's value.               |
 
 ---
 
 ## Statuses
 
-| Status | Meaning |
-|--------|---------|
-| `Proposed` | Decision drafted, not yet confirmed by a human stakeholder |
-| `Accepted` | Confirmed and in effect |
-| `Deprecated` | No longer relevant; system moved on but decision was not replaced |
-| `Superseded by ADR-NNN` | Replaced by a later decision — link the new ADR number |
+| Status                  | Meaning                                                           |
+| ----------------------- | ----------------------------------------------------------------- |
+| `Proposed`              | Decision drafted, not yet confirmed by a human stakeholder        |
+| `Accepted`              | Confirmed and in effect                                           |
+| `Deprecated`            | No longer relevant; system moved on but decision was not replaced |
+| `Superseded by ADR-NNN` | Replaced by a later decision — link the new ADR number            |
 
 ---
 

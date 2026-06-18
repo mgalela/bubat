@@ -1,4 +1,4 @@
-# C4ICM Setup
+# BUBAT Setup
 
 Ask all questions in one pass. Collect all answers before making any changes.
 After the user answers, populate `shared/system-meta.md` with their responses.
