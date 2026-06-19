@@ -14,10 +14,11 @@ Quality gates run between stages. A downstream stage may start only when its ups
 | G5 Diagram | before save of diagram artifacts | diagram code uses configured format and names match upstream labels exactly | re-render diagram only |
 | G6 ADR | before appending tech decisions | no duplicate ADR for same stage + decision title; changed decisions supersede prior ADR | append superseding ADR, do not duplicate |
 | G7 Bridge | before saving Stage 06 artifacts | all §C/§V entries trace to extraction map; missing inputs noted explicitly; all interface spec TODO items documented | fill map or mark missing |
+| G8 Test Scaffold | before saving Stage 08 artifacts | Stage 07 validation report exists and contains zero Blocking findings | resolve all Blocking findings in Stage 07 report first |
 
 ## Required Stage Order
 
-`setup → 01-discovery → 01b-flow → 01c-bounded-context → 01d-data-model → 02-context → 03-container → 04-component → 05-document → 06-spec`
+`setup → 01-discovery → 01b-flow → 01c-bounded-context → 01d-data-model → 02-context → 03-container → 04-component → 05-document → 06-spec → 07-spec-validation → 08-test-scaffold`
 
 `raw route` may run before or after `setup`, but must run before any stage consumes `raw/` materials.
 
