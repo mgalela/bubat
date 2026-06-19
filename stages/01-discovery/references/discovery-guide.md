@@ -55,6 +55,24 @@ Questions that shape the system discovery. Cover every topic. Record answers ver
 - What implementation patterns are planned or in use? (e.g., event-driven, CQRS, microservices, monolith)
 - Are there existing shared services or platforms that this system must integrate with?
 
+## Pattern Signal Capture
+
+After answering NFRs and Technology Choices, extract constraint signals for architectural style (Stage 03) and component pattern (Stage 04) decisions. Record these in the discovery output under a "Pattern Signals" section.
+
+| Constraint Signal | Source Question | Stage 03 Implication | Stage 04 Implication |
+|---|---|---|---|
+| High scale (>1 000 RPS) or independent scaling needed | Scale targets | Separate services over monolith | — |
+| Multiple teams / squads own different areas | Internal structure | Team boundaries → service boundaries | — |
+| Different release cadences per area | Which areas change most? | Separate deployable units per high-change area | — |
+| Strong consistency / ACID across BCs | Data volume + compliance | Shared DB or modular monolith over microservices | — |
+| Single team, early stage, simple domain | Team size + core job | Modular monolith; split later | Layered (default) |
+| Read/write ratio >10:1 or distinct latency SLAs | NFR latency + scale | — | CQRS candidate |
+| Long-running tasks flagged | Existing structure | Async worker container | Pipeline Worker |
+| Swappable external integrations or compliance isolation | External systems + security | — | Hexagonal |
+| Heavy business logic concentrated in one BC | BC complexity from Stage 01c | — | Layered or Hexagonal |
+
+If a signal is absent or unknown, record "Not determined" — do not guess. Gaps here are open questions to resolve before Stage 03.
+
 ---
 
 ## Output Format
@@ -91,6 +109,11 @@ Structure the discovery artifact as:
 ## Technology Choices
 | Technology | Role | Why Chosen | Constraints / Ruled Out |
 |------------|------|------------|------------------------|
+| ... | ... | ... | ... |
+
+## Pattern Signals
+| Signal | Source | Stage 03 Implication | Stage 04 Implication |
+|--------|--------|----------------------|----------------------|
 | ... | ... | ... | ... |
 
 ## High-Level Structure (preview)

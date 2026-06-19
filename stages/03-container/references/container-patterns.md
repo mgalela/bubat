@@ -2,6 +2,42 @@
 
 Common topologies to recognize and reference when building Level 2 diagrams.
 
+## Step 0: Architectural Style Decision
+
+Before choosing a topology, decide the architectural style. This is the highest-level decision — it drives team structure, deployment model, and operational complexity. **Always write an ADR for this decision.**
+
+### Input
+
+Read the "Pattern Signals" section of `{slug}-discovery.md`. Map signals to style:
+
+| If Stage 01 signals this... | Consider this style |
+|---|---|
+| Single team, early stage, simple domain | **Modular Monolith** — one deployable, partitioned internally by BC |
+| Multiple teams, independent release cadence, high scale | **Microservices** — one service per BC or subdomain |
+| Strong ACID consistency across BCs, low ops maturity | **Monolith** — simplest; refactor later |
+| Mix: some BCs high-change, some stable | **Hybrid** — extract volatile BCs as services; stable BCs stay in monolith |
+
+### Style Comparison
+
+| Attribute | Monolith | Modular Monolith | Microservices |
+|---|---|---|---|
+| Deployments | One unit | One unit | Per service |
+| Team autonomy | Low | Medium | High |
+| Operational complexity | Low | Low | High |
+| Cross-BC transactions | Easy (shared DB) | Easy | Hard (Saga / 2PC) |
+| Startup cost | Lowest | Low | High |
+| When to migrate away | When release friction hurts | When team > ~20 devs | Rarely — justify upfront |
+
+### ADR Triggers at Stage 03
+
+Write an ADR when:
+- Architectural style is decided (always — most consequential decision)
+- A topology pattern deviates from the default for the chosen style
+- A cross-BC data store sharing decision is made (shared DB vs. database-per-service)
+- An async integration pattern (event bus, queue) is introduced
+
+---
+
 ## Pattern: Classic Web Three-Tier
 
 ```
