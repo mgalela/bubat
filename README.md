@@ -11,11 +11,13 @@ Inspired by / built on ideas from [Interpreted Context Methodology](https://gith
 ```
 raw/ → setup → 01-discovery → 01b-flow → 01c-bounded-context → 01d-data-model
                                                                       ↓
-                              06-spec ← 05-document ← 04-component ← 03-container ← 02-context
-                                  ↓
-                      SPEC.md + openapi.yaml + .proto + interfaces.*
-                                  ↓
-                             cavekit /ck:build
+                                          05-document ← 04-component ← 03-container ← 02-context
+                                               ↓ (optional)                ↓
+                                           stakeholder            06-spec (bridge)
+                                             review                    ↓
+                                                        SPEC.md + openapi.yaml + .proto + interfaces.*
+                                                                    ↓
+                                                               cavekit /ck:build
 ```
 
 | Stage | Output |
@@ -27,8 +29,8 @@ raw/ → setup → 01-discovery → 01b-flow → 01c-bounded-context → 01d-dat
 | `02-context` | C4 Level 1 — system context diagram |
 | `03-container` | C4 Level 2 — container diagram, interface contracts, sequences |
 | `04-component` | C4 Level 3 — component diagrams per container |
-| `05-document` | Final architecture document (assembled, audience-ready) |
-| `06-spec` | `SPEC.md` bridge → cavekit spec + `openapi.yaml` + `.proto` + language interfaces |
+| `05-document` | Final architecture document (assembled, audience-ready) — **optional**, for stakeholder review only |
+| `06-spec` | `SPEC.md` bridge → cavekit spec + `openapi.yaml` + `.proto` + language interfaces — reads stages 01–04 directly, does not require `05-document` |
 
 ---
 
