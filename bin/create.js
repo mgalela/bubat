@@ -4,6 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const args = process.argv.slice(2);
 
@@ -52,7 +53,7 @@ const relFromCwd = path.relative(process.cwd(), dest).replace(/\\/g, '/');
 const prefix = isEmbed && relFromCwd ? relFromCwd + '/' : '';
 
 const COPY_EXCLUDE = new Set([
-  'bin', 'package.json', 'package-lock.json',
+  'bin', 'skills', 'package.json', 'package-lock.json',
   'node_modules', '.git', '.npmignore', '.claude',
   'example', 'ref-ICM', 'C4ICM.zip',
 ]);
@@ -159,6 +160,25 @@ function updateDir(srcDir, destDir, pfx, relBase) {
   return { updated, added, skipped };
 }
 
+function installSkills(templateSrcDir) {
+  const skillsSrc = path.join(templateSrcDir, 'skills');
+  if (!fs.existsSync(skillsSrc)) return { installed: 0, updated: 0 };
+
+  const claudeSkillsDir = path.join(os.homedir(), '.claude', 'skills');
+  fs.mkdirSync(claudeSkillsDir, { recursive: true });
+
+  let installed = 0, updated = 0;
+  for (const skillName of fs.readdirSync(skillsSrc)) {
+    const src = path.join(skillsSrc, skillName);
+    if (!fs.lstatSync(src).isDirectory()) continue;
+    const dest = path.join(claudeSkillsDir, skillName);
+    const existed = fs.existsSync(dest);
+    copyDir(src, dest);
+    if (existed) updated++; else installed++;
+  }
+  return { installed, updated };
+}
+
 // --- run ---
 
 if (isUpdate) {
@@ -180,8 +200,11 @@ if (isUpdate) {
     }
   }
 
+  const skills = installSkills(templateSrc);
+
   console.log(`\nBUBAT updated at: ${dest}`);
   console.log(`  ${updated} files updated, ${added} files added, ${skipped} files preserved (user data)`);
+  console.log(`  ${skills.updated} skills updated, ${skills.installed} skills added → ~/.claude/skills/`);
   console.log('');
   console.log('Review changes, then open in Claude Code and continue your pipeline.');
 
@@ -193,6 +216,7 @@ if (isUpdate) {
   }
 
   copyDir(templateSrc, dest);
+  const skills = installSkills(templateSrc);
 
   if (isEmbed && prefix) {
     const allPatchFiles = [...PATCH_FILES_BASE, ...collectStagePatchFiles(dest)];
@@ -205,6 +229,7 @@ if (isUpdate) {
   }
 
   console.log(`\nBUBAT scaffolded at: ${dest}`);
+  console.log(`  ${skills.installed} skills installed, ${skills.updated} skills updated → ~/.claude/skills/`);
 
   if (isEmbed) {
     const importLine = `@${relFromCwd}/CLAUDE.md`;
