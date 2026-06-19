@@ -40,6 +40,11 @@ Then confirm: "Setup complete. Run `status` to check where you are in the pipeli
    - Default: Auto-detect from tech stack and contract protocols
    - Note: "Auto-detect" reads protocols from contracts and language from tech stack. Override here only if auto-detect would pick the wrong formats.
 
+9. What is the absolute path to the project's source code directory?
+   - Example: "/Users/alice/projects/my-system"
+   - Default: Not provided
+   - Note: Used to auto-detect graphify output (`graphify-out/`) and other project artifacts during discovery.
+
 ---
 
 ## After Collecting Answers
