@@ -41,6 +41,7 @@ BUBAT/
 | `update <stage(s)>` | Invoke skill `bubat-update` with stage arguments |
 | `triage <idea>`     | Invoke skill `bubat-triage` with idea description |
 | `bridge`            | Read `stages/06-spec/CONTEXT.md` and execute   |
+| `sync graphify`     | Feed completed BUBAT stage outputs back into the project graphify graph — see ## Graphify Sync |
 
 ## Stage Gates
 
@@ -77,7 +78,7 @@ For every stage: check `raw/MANIFEST.md` first. Load raw files listed under the 
 
 | Task                | Load These                                                                                                                                                                                | Do NOT Load                                                 |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| Discovery           | `shared/system-meta.md`, `stages/01-discovery/references/discovery-guide.md`, `stages/01-discovery/references/adr-template.md`                                                            | `stages/01b-flow/` through `stages/05-document/`            |
+| Discovery           | `shared/system-meta.md`, `stages/01-discovery/references/discovery-guide.md`, `stages/01-discovery/references/adr-template.md`, `stages/01-discovery/references/graphify-guide.md` (load always; apply only if `graphify-out/` detected at `project_path`) | `stages/01b-flow/` through `stages/05-document/`            |
 | Business flows      | `stages/01-discovery/output/`, `shared/system-meta.md`, `stages/01b-flow/references/`                                                                                                     | `stages/01c-bounded-context/` through `stages/05-document/` |
 | Bounded context map | `stages/01b-flow/output/`, `stages/01-discovery/output/`, `shared/system-meta.md`, `stages/01c-bounded-context/references/`                                                               | `stages/01d-data-model/` through `stages/05-document/`      |
 | Domain data model   | `stages/01c-bounded-context/output/`, `stages/01b-flow/output/`, `shared/system-meta.md`, `stages/01d-data-model/references/`                                                             | `stages/02-context/` through `stages/05-document/`          |
@@ -86,3 +87,80 @@ For every stage: check `raw/MANIFEST.md` first. Load raw files listed under the 
 | Component diagrams  | `stages/03-container/output/`, `shared/c4-notation.md`, `stages/04-component/references/`                                                                                                 | `stages/05-document/`                                       |
 | Final document      | `stages/01-discovery/output/`, `stages/01b-flow/output/`, `stages/02-context/output/`, `stages/03-container/output/`, `stages/04-component/output/`, `stages/05-document/references/`    | `stages/06-spec/`                                           |
 | Cavekit SPEC.md + interface specs | ALL `stages/01-discovery/output/` through `stages/04-component/output/`, `shared/system-meta.md`, `stages/06-spec/references/` | `stages/05-document/` (use source stages directly) |
+
+## Graphify Sync
+
+Feeds completed BUBAT stage outputs back into the project's graphify graph, enriching it with domain knowledge, bounded contexts, and architecture decisions that code analysis alone cannot produce.
+
+**Trigger:** user types `sync graphify`
+
+### Prerequisites
+
+- `project_path` set in `shared/system-meta.md` (run `setup` first)
+- `<project_path>/graphify-out/graph.json` exists (graphify must have been run on the project at least once)
+- At least one stage has output files in `stages/*/output/`
+
+### Process
+
+1. Read `shared/system-meta.md` → get `project_path`. If "Not provided", stop: "Set project_path first by running `setup`."
+
+2. Check `<project_path>/graphify-out/graph.json` exists. If missing, stop: "Run `graphify <project_path>` first to initialize the project graph."
+
+3. Collect all BUBAT output files that exist:
+   ```
+   stages/01-discovery/output/*.md
+   stages/01b-flow/output/*.md
+   stages/01c-bounded-context/output/*.md
+   stages/01d-data-model/output/*.md
+   stages/02-context/output/*.md
+   stages/03-container/output/*.md
+   stages/04-component/output/*.md
+   stages/05-document/output/*.md
+   ```
+   Skip any stage whose output/ directory is empty. List what was found.
+
+4. Present to user:
+   > "Found N BUBAT output files across X stages. Will copy to `<project_path>/docs/architecture/bubat/` and run `graphify <project_path> --update`. Proceed?"
+   
+   Wait for confirmation before continuing.
+
+5. Run:
+   ```bash
+   mkdir -p <project_path>/docs/architecture/bubat
+   cp stages/01-discovery/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+   cp stages/01b-flow/output/*.md     <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+   cp stages/01c-bounded-context/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+   cp stages/01d-data-model/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+   cp stages/02-context/output/*.md   <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+   cp stages/03-container/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+   cp stages/04-component/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+   cp stages/05-document/output/*.md  <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+   ```
+
+6. Invoke graphify update (via the graphify skill, `--update` flag):
+   ```
+   /graphify <project_path> --update
+   ```
+   This re-extracts only new/changed files — skips already-indexed code, only processes BUBAT docs.
+
+7. After update completes, report:
+   - How many BUBAT files were added to the graph
+   - New communities detected (if any) — these likely correspond to newly named domain concepts
+   - New surprising connections — cross-links between code structure and architecture docs
+
+### What graphify gains from BUBAT outputs
+
+| BUBAT output | What graphify extracts |
+|---|---|
+| Discovery report | System purpose, user roles, external dependencies as named nodes |
+| Business flows | Flow names and step sequences as hyperedges |
+| BC map + context relationships | Domain boundaries and integration patterns as community-spanning edges |
+| Data model | Entity names and relationships with domain labels (not just code class names) |
+| Architecture diagrams (Mermaid) | Container/component relationships as INFERRED edges |
+| Tech decisions log | ADR rationale as `rationale_for` edges linking decisions to components |
+
+### When to run
+
+- After completing all main stages (01 through 04 minimum)
+- After any significant stage update (`update <stage>` was run)
+- Before sharing the architecture document — ensures the project graph reflects finalized decisions
