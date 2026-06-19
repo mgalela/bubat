@@ -27,7 +27,9 @@ BUBAT/
     ├── 03-container/                  (C4 Level 2 -- container diagram)
     ├── 04-component/                  (C4 Level 3 -- component diagrams per container)
     ├── 05-document/                   (assemble final architecture document)
-    └── 06-spec/                       (bridge: convert BUBAT outputs → cavekit SPEC.md + interface specs)
+    ├── 06-spec/                       (bridge: convert BUBAT outputs → cavekit SPEC.md + interface specs)
+    ├── 07-spec-validation/            (validate Stage 06 outputs for completeness, testability, consistency)
+    └── 08-test-scaffold/              (derive BDD/unit/integration/e2e test scenarios from validated spec)
 ```
 
 ## Triggers
@@ -52,6 +54,7 @@ Before starting any stage, read `shared/stage-gates.md` and apply relevant gates
 3. Stage audit + placeholder + traceability gates before saving outputs.
 4. ADR gate before appending to tech decisions log.
 5. Bridge gate before saving Stage 06 artifacts.
+6. Test Scaffold gate (G8) before saving Stage 08 artifacts — Stage 07 report must exist with zero Blocking findings.
 
 Downstream stages must not run when required upstream artifacts are missing, except Stage 06 may emit explicit `[MISSING — run stage XX first]` markers by design.
 
@@ -68,6 +71,8 @@ Downstream stages must not run when required upstream artifacts are missing, exc
 | Build C4 Level 3 diagrams                      | `stages/04-component/CONTEXT.md`        |
 | Assemble architecture doc                      | `stages/05-document/CONTEXT.md`         |
 | Generate cavekit SPEC.md + interface specs     | `stages/06-spec/CONTEXT.md`             |
+| Validate spec outputs for quality and testability | `stages/07-spec-validation/CONTEXT.md` |
+| Generate BDD/unit/integration/e2e test scaffolds | `stages/08-test-scaffold/CONTEXT.md`  |
 | Re-render a diagram only                       | Use `diagram <stage>` trigger           |
 | Re-run after system changes                    | Use `update <stage(s)>` trigger         |
 | Identify impact of a new idea                  | Use `triage <idea>` trigger             |
@@ -87,6 +92,8 @@ For every stage: check `raw/MANIFEST.md` first. Load raw files listed under the 
 | Component diagrams  | `stages/03-container/output/`, `shared/c4-notation.md`, `stages/04-component/references/`                                                                                                 | `stages/05-document/`                                       |
 | Final document      | `stages/01-discovery/output/`, `stages/01b-flow/output/`, `stages/02-context/output/`, `stages/03-container/output/`, `stages/04-component/output/`, `stages/05-document/references/`    | `stages/06-spec/`                                           |
 | Cavekit SPEC.md + interface specs | ALL `stages/01-discovery/output/` through `stages/04-component/output/`, `shared/system-meta.md`, `stages/06-spec/references/` | `stages/05-document/` (use source stages directly) |
+| Spec validation | `stages/06-spec/output/` (all files), `shared/system-meta.md`, `stages/07-spec-validation/references/` | All other stages |
+| Test scaffold | `stages/07-spec-validation/output/`, `stages/06-spec/output/SPEC.md`, `stages/06-spec/output/openapi.yaml`, `stages/06-spec/output/{{SYSTEM_SLUG}}.proto`, `stages/01b-flow/output/`, `stages/04-component/output/{{SYSTEM_SLUG}}-component-scope.md`, `stages/06-spec/output/{{SYSTEM_SLUG}}-extraction-map.md`, `stages/08-test-scaffold/references/` | Discovery through 05-document stages |
 
 ## Graphify Sync
 
