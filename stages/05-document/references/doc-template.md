@@ -142,6 +142,13 @@ Shows which components handle which steps of the scenario.]
 
 [Repeat sequence detail blocks for each relevant scenario.]
 
+### 8.x Implementation Trace
+
+| Component | File Path | Symbol | Line Span | Source Mode | Confidence | Notes |
+|-----------|-----------|--------|-----------|-------------|------------|-------|
+
+[Source: Stage 04 component-code-map artifact. Repeat per container or collapse into one appendix table if large.]
+
 ---
 
 ## 9. Tech Stack Rationale
@@ -166,6 +173,15 @@ Shows which components handle which steps of the scenario.]
 ## 11. Open Questions
 
 [Unresolved items from discovery and subsequent stages, each as a bullet with owner if known]
+
+---
+
+## 12. Traceability
+
+| Flow | Scenario | Bounded Context | Container | Component | Contract | Code Map |
+|------|----------|-----------------|-----------|-----------|----------|----------|
+
+[Use `Code Map` column for `file:path#line-range` or `[N/A]` with reason.]
 
 ---
 

@@ -2,6 +2,10 @@
   "name": "create-bubat",
   "version": "1.0.0",
   "description": "Scaffold BUBAT architecture documentation workspace for Claude Code",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgalela/bubat.git"
+  },
   "bin": {
     "create-bubat": "./bin/create.js"
   },
@@ -12,6 +16,7 @@
     "CONTEXT.md",
     "README.md",
     "raw/",
+    "triage/",
     "setup/",
     "shared/",
     "stages/"

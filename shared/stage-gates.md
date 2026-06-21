@@ -15,6 +15,7 @@ Quality gates run between stages. A downstream stage may start only when its ups
 | G6 ADR | before appending tech decisions | no duplicate ADR for same stage + decision title; changed decisions supersede prior ADR | append superseding ADR, do not duplicate |
 | G7 Bridge | before saving Stage 06 artifacts | all §C/§V entries trace to extraction map; missing inputs noted explicitly; all interface spec TODO items documented | fill map or mark missing |
 | G8 Test Scaffold | before saving Stage 08 artifacts | Stage 07 validation report exists and contains zero Blocking findings | resolve all Blocking findings in Stage 07 report first |
+| G9 Architecture Source of Truth | before architecture-significant code work and after code changes | Feature/change request has triage impact artifact; Stage 06 bridge is refreshed before code work; Stage 04 code map is refreshed after code work | run `triage <request>`, `bridge`, then post-code `update 04` |
 
 ## Required Stage Order
 
@@ -33,6 +34,10 @@ Stage 06 (`bridge`) may be run before Stage 05 -- it does not depend on `05-docu
 | Tech decisions log | append-only; if decision changed, append new ADR with `Supersedes: ADR-NNN` |
 | Raw manifest | overwrite generated table after review confirmation |
 | Interface spec files (openapi.yaml, .proto, -interfaces.*) | overwrite whole file after checkpoint confirmation |
+
+## Architecture Source-of-Truth Rule
+
+Stages `01` through `04` are architecture source of truth. For architecture-significant changes, run `triage <request>` before implementation, update affected stages, run Stage 06 `bridge` for cavekit, then refresh Stage 04 code map after code changes. See `shared/architecture-source-of-truth.md`.
 
 ## Manifest Rule
 

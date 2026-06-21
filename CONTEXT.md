@@ -1,39 +1,39 @@
-# BUBAT
+# BUBAT Context
 
-Document software architecture through four levels of zoom using C4 model, then bridge outputs into cavekit `SPEC.md`.
+BUBAT documents architecture through C4 stages, then bridges to cavekit `SPEC.md`.
 
-## Task Routing
+## Use These Registries
 
-| Task Type | Go To | Description |
-|-----------|-------|-------------|
-| Gather system info | `stages/01-discovery/CONTEXT.md` | Interview stakeholders and parse existing docs |
-| Capture business flows | `stages/01b-flow/CONTEXT.md` | Map user journeys and select key scenarios for sequence diagrams |
-| Map bounded contexts | `stages/01c-bounded-context/CONTEXT.md` | Identify domain language boundaries and context relationships before structural design |
-| Design domain data model | `stages/01d-data-model/CONTEXT.md` | Convert BC aggregates into entity-relationship model; assign storage hints |
-| Build context diagram | `stages/02-context/CONTEXT.md` | C4 Level 1 -- system boundary and external actors |
-| Build container diagram | `stages/03-container/CONTEXT.md` | C4 Level 2 -- major deployable units |
-| Build component diagrams | `stages/04-component/CONTEXT.md` | C4 Level 3 -- internals of each container |
-| Assemble final document | `stages/05-document/CONTEXT.md` | Combine all levels into one architecture doc |
-| Generate cavekit spec | `stages/06-spec/CONTEXT.md` | Convert BUBAT outputs into `SPEC.md` |
+| Need | File |
+|------|------|
+| Stage inputs/process protocol | `shared/stage-runbook.md` |
+| Stage routing + load boundaries | `shared/stage-index.md` |
+| Output artifact ownership | `shared/output-catalog.md` |
+| Quality gates | `shared/stage-gates.md` |
+| Feature/change workflow | `shared/architecture-source-of-truth.md` |
 
-## Triggers
+## Main Triggers
 
-| Keyword | Action |
-|---------|--------|
-| `setup` | Run onboarding, populate `shared/system-meta.md` |
-| `raw route` | Route `raw/` files into stage manifest |
-| `status` | Show completion for all stages |
-| `bridge` | Run Stage 06 and generate cavekit `SPEC.md` |
-| `diagram <stage>` | Re-render diagram blocks only |
-| `update <stage(s)>` | Re-run stages and downstream dependencies |
+| Task | Trigger / Skill |
+|------|-----------------|
+| Run stage | `stage <id>` → `skills/bubat-stage/SKILL.md` |
+| Route raw files | `raw route` → `skills/bubat-raw-route/SKILL.md` |
+| Show status | `status` → `skills/bubat-status/SKILL.md` |
+| Re-render diagram | `diagram <stage>` → `skills/bubat-diagram/SKILL.md` |
+| Update after change | `update <stage(s)>` → `skills/bubat-update/SKILL.md` |
+| Triage feature/change | `triage <idea>` → `skills/bubat-triage/SKILL.md` |
+| Generate cavekit spec | `bridge` → `skills/bubat-bridge/SKILL.md` |
+| Sync architecture docs to graphify | `sync graphify` → `skills/bubat-graphify-sync/SKILL.md` |
 
-## Shared Resources
+## Source-of-Truth Loop
 
-| Resource | Location | Contains |
-|----------|----------|----------|
-| System identity | `shared/system-meta.md` | System name, purpose, tech stack, team context |
-| C4 notation rules | `shared/c4-notation.md` | Element definitions, naming conventions, diagram rules |
-| Stage gates | `shared/stage-gates.md` | Cross-stage quality gates and rerun policy |
-| Raw manifest | `raw/MANIFEST.md` | File-to-stage routing table |
-| Business flows | `stages/01b-flow/output/` | User journey flowcharts and key scenario definitions |
-| Domain data model | `stages/01d-data-model/output/` | Entity inventory, cross-BC dependencies, storage hints |
+```text
+triage <feature/change>
+→ update affected stages
+→ bridge
+→ cavekit/code changes
+→ update 04
+→ bridge if task pointers changed
+```
+
+Stages `01–04` are design truth. Stage `04` code map links components to implementation files. Stage `06` is cavekit handoff.
