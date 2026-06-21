@@ -21,6 +21,7 @@ Accept:
 - `find artifact <term>`
 - `locate <term>`
 - `trace deep <term>`
+- `trace research <term>`
 
 ## Core Rule
 
@@ -30,8 +31,9 @@ Priority:
 
 1. grep `shared/artifact-manifest.ndjson`
 2. read `shared/artifact-index.json` only for `trace summary <n>`
-3. read artifact file only for `open <n>` / `open path <...>`
-4. use deep search only for explicit `trace deep <term>`
+3. read `shared/research-index.json` only for explicit `trace research <term>` or stage/update research reuse
+4. read artifact/research file only for `open <n>` / `open path <...>`
+5. use deep search only for explicit `trace deep <term>`
 
 If manifest missing or empty:
 
@@ -53,6 +55,14 @@ If manifest missing or empty:
 - read `shared/artifact-index.json`
 - look up selected result only
 - return: stage, artifact, 1-sentence summary, up to 4 headings, path
+
+### `trace research <term>`
+
+- read `shared/research-index.json`
+- rank by topic, stage, keywords, code_refs, artifacts
+- return top 5 only
+- do not read full research documents by default
+- suggest `open path <shared/research/...>` for full document
 
 ### `open <n>` / `open path <...>`
 
@@ -87,6 +97,7 @@ Use this concept routing before deep search:
 | validation finding                                             | `07-spec-validation`  | `{slug}-spec-validation.md`                                                         |
 | BDD, unit, integration, e2e, coverage                          | `08-test-scaffold`    | test scaffold outputs                                                               |
 | impact, affected stages, pending change                        | `triage`              | `triage/*-impact.md`                                                                |
+| code refs, implementation evidence, prior research             | `research`            | `shared/research/*.md` via `shared/research-index.json`                             |
 
 ## Output
 
@@ -128,8 +139,8 @@ Next:
 
 ## Rules
 
-- `shared/artifact-manifest.ndjson`, `shared/artifact-index.json`, `shared/triage-index.json` = lookup cache, not source of truth
-- source of truth priority: stages `01–04` > `06-spec` > triage/cache
+- `shared/artifact-manifest.ndjson`, `shared/artifact-index.json`, `shared/triage-index.json`, `shared/research-index.json` = lookup cache, not source of truth
+- source of truth priority: stages `01–04` > `06-spec` > triage/research/cache
 - default trace = manifest grep only
 - no broad workspace search in default mode
 - if index stale/missing, fail cheap and recommend `refresh index`

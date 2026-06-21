@@ -73,7 +73,7 @@ Then wait for the user's research query.
 
 5. **Gather metadata for the research document:**
    - Run Bash() tools to generate all relevant metadata
-   - Filename: `thoughts/shared/research/YYYY-MM-DD-ENG-XXXX-description.md`
+   - Filename: `shared/research/YYYY-MM-DD-ENG-XXXX-description.md`
      - Format: `YYYY-MM-DD-ENG-XXXX-description.md` where:
        - YYYY-MM-DD is today's date
        - ENG-XXXX is the ticket number (omit if no ticket)
@@ -82,7 +82,7 @@ Then wait for the user's research query.
        - With ticket: `2025-01-08-ENG-1478-parent-child-tracking.md`
        - Without ticket: `2025-01-08-authentication-flow.md`
 
-6. **Generate research document:**
+6. **Generate and save research document:**
    - Use the metadata gathered in step 4
    - Structure the document with YAML frontmatter followed by content:
      ```markdown
@@ -131,11 +131,15 @@ Then wait for the user's research query.
      [Current patterns, conventions, and design implementations found in the codebase]
 
      ## Related Research
-     [Links to other research documents in thoughts/shared/research/]
+     [Links to other research documents in shared/research/]
 
      ## Open Questions
      [Any areas that need further investigation]
      ```
+
+   - Create `shared/research/` if it does not exist
+   - Write the complete research document to the filename from step 5 before presenting findings
+   - If the file cannot be written, report the failure explicitly and do not imply persistence succeeded
 
 7. **Add GitHub permalinks (if applicable):**
    - Check if on main branch or if commit is pushed: `git branch --show-current` and `git status`
@@ -146,6 +150,7 @@ Then wait for the user's research query.
 
 8. **Present findings:**
    - Present a concise summary of findings to the user
+   - Include the saved research path
    - Include key file references for easy navigation
    - Ask if they have follow-up questions or need clarification
 
@@ -160,6 +165,7 @@ Then wait for the user's research query.
 ## Important notes:
 - Always use parallel Task agents to maximize efficiency and minimize context usage
 - Always run fresh codebase research - never rely solely on existing research documents
+- Existing `shared/research/*.md` documents may be used as maps to target fresh validation, but not as the only evidence source
 - Focus on finding concrete file paths and line numbers for developer reference
 - Research documents should be self-contained with all necessary context
 - Each sub-agent prompt should be specific and focused on read-only documentation operations
@@ -177,6 +183,7 @@ Then wait for the user's research query.
   - ALWAYS wait for all sub-agents to complete before synthesizing (step 4)
   - ALWAYS gather metadata before writing the document (step 5 before step 6)
   - NEVER write the research document with placeholder values
+  - ALWAYS save the research document under `shared/research/` before final response
 - **Frontmatter consistency**:
   - Always include frontmatter at the beginning of research documents
   - Keep frontmatter fields consistent across all research documents

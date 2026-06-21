@@ -93,6 +93,7 @@ New stages added automatically.
 
 Existing project note:
 - use `@commands/cl/research_codebase.md` in each stage for targeted codebase exploration
+- save research findings under `shared/research/*.md` and index them in `shared/research-index.json`
 - useful for repos with existing code, docs, interfaces, migrations, tests
 - research findings improve stage precision; confirmed BUBAT outputs remain source of truth
 
@@ -264,7 +265,10 @@ raw add docs/
 raw route
 setup
 stage <id>
+→ reuse matching shared/research-index.json entries as code map
 → use @commands/cl/research_codebase.md with stage-focused question
+→ save research to shared/research/*.md
+→ sync/refresh index
 → confirm checkpoint
 ```
 
@@ -403,4 +407,4 @@ Triggers are implemented as installable Claude Code skills. `create-bubat` insta
 
 Skills are standalone — they can be updated independently of the workspace via `npx create-bubat --update`.
 
-For existing project exploration, also use `commands/cl/research_codebase.md` with installed `agents/cl/*` helpers.
+For existing project exploration, also use `commands/cl/research_codebase.md` with installed `agents/cl/*` helpers. Save reusable findings under `shared/research/*.md`; `refresh index` builds `shared/research-index.json` for later stage reuse.

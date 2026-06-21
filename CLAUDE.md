@@ -26,7 +26,7 @@ Workspace root rule:
 | `raw route` | invoke `skills/bubat-raw-route` |
 | `status` | invoke `skills/bubat-status` |
 | `where <term>` / `trace <term>` / `find artifact <term>` | invoke `skills/bubat-trace`; ultra-cheap grep-first manifest lookup, then optional summary/open |
-| `refresh index` | invoke `skills/bubat-refresh-index`; rebuild `shared/artifact-manifest.ndjson`, `shared/artifact-index.json`, `shared/triage-index.json` |
+| `refresh index` | invoke `skills/bubat-refresh-index`; rebuild `shared/artifact-manifest.ndjson`, `shared/artifact-index.json`, `shared/triage-index.json`, `shared/research-index.json` |
 | `sync index <path(s)>` | invoke `skills/bubat-sync-index`; incremental index sync after artifact save/update/delete |
 | `diagram <stage>` | invoke `skills/bubat-diagram` |
 | `update <stage(s)>` | invoke `skills/bubat-update`; use `@commands/cl/research_codebase.md` on existing repos |

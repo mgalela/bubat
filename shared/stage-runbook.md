@@ -8,13 +8,17 @@ Common protocol for running any BUBAT stage.
 2. Read `shared/stage-index.md` for current stage inputs, references, outputs, and downstream consumers.
 3. Check `raw/MANIFEST.md`; load only rows whose `Stages` contains current exact stage id.
 4. Load required upstream artifacts and stage references.
-5. If `project_path` points to existing codebase, use `@commands/cl/research_codebase.md` before stage synthesis to perform focused codebase exploration for current stage. Use findings as evidence source, not replacement for upstream artifacts or raw materials.
+5. If `project_path` points to existing codebase:
+   - read `shared/research-index.json` if present to find reusable prior codebase research for current stage/topic/code refs
+   - load only compact relevant prior research from `shared/research/*.md` (summary, code references, open questions) as a map
+   - use `@commands/cl/research_codebase.md` before stage synthesis to perform focused fresh validation for current stage
+   - require saved research output under `shared/research/`; use findings as evidence source, not replacement for upstream artifacts or raw materials
 6. If required inputs are missing, stop unless stage explicitly allows missing markers.
 7. Execute stage-specific rules from `stages/<stage>/CONTEXT.md`.
 8. Present checkpoint(s) before writing outputs.
 9. Run stage audit plus placeholder and traceability gates.
 10. Save outputs to `stages/<stage>/output/`.
-11. After successful confirmed save, incrementally sync changed output paths into lookup indexes via `skills/bubat-sync-index`.
+11. After successful confirmed save, incrementally sync changed output paths into lookup indexes via `skills/bubat-sync-index`. If codebase research was saved under `shared/research/`, sync that path too.
 12. Append ADR/tech decision entries only when rules require; never overwrite tech decisions log.
 
 ## Source-of-Truth Protocol
@@ -41,6 +45,7 @@ For `update` runs in patch mode:
 
 Index sync rule:
 - sync indexes only after confirmed final write
+- sync saved `shared/research/*.md` so reuse lookup stays current
 - do not sync preview/dry-run output
 - if incremental sync fails, keep artifact write and recommend `refresh index`
 

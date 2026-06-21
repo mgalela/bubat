@@ -20,7 +20,11 @@ Given the stage numbers specified:
 3. Warn: downstream stages will be re-run — confirm before proceeding.
 4. Re-run each specified stage in order, starting from the lowest number.
 5. Each re-run stage reads its inputs fresh (including any upstream outputs that were re-run in the same pass).
-6. If workspace targets existing project codebase (`${WORKSPACE_ROOT}/shared/system-meta.md` has `project_path` or code exists nearby), invoke `@commands/cl/research_codebase.md` with stage-focused query for each re-run stage before synthesis.
+6. If workspace targets existing project codebase (`${WORKSPACE_ROOT}/shared/system-meta.md` has `project_path` or code exists nearby), for each re-run stage before synthesis:
+   - read `${WORKSPACE_ROOT}/shared/research-index.json` if present to find reusable prior research matching current stage/topic/code refs
+   - load only compact relevant sections from `${WORKSPACE_ROOT}/shared/research/*.md` (summary, code references, open questions) as a map
+   - invoke `@commands/cl/research_codebase.md` with stage-focused query to fresh-validate live code
+   - require saved research output under `${WORKSPACE_ROOT}/shared/research/`; keep the saved path for index sync and reporting
 7. For markdown stage artifacts in `patch` mode:
    - read existing artifact first
    - generate candidate updated artifact from current inputs
@@ -40,8 +44,8 @@ Given the stage numbers specified:
    - inspect candidate changes with `git diff -- <artifact>` when repo exists
    - use git history for rollback/audit if needed
    - do not infer semantic section impact from git alone
-11. After each confirmed artifact write/patch, invoke `skills/bubat-sync-index` for touched paths.
-12. Append a note to `{slug}-tech-decisions.md` marking which stages were updated, why, and whether mode was `patch` or `rewrite` (ask user for reason).
+11. After each confirmed artifact write/patch, invoke `skills/bubat-sync-index` for touched paths and any saved `${WORKSPACE_ROOT}/shared/research/*.md` paths from step 6.
+12. Append a note to `{slug}-tech-decisions.md` marking which stages were updated, why, whether mode was `patch` or `rewrite`, and which research docs were used/saved (ask user for reason).
 13. Sync tech-decisions artifact too if it was updated.
 14. After all stages complete, invoke skill `bubat-status` to confirm.
 

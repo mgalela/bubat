@@ -285,7 +285,7 @@ After structure approval:
 ## References
 
 - Original ticket: `thoughts/shared/tickets/eng_XXXX.md`
-- Related research: `thoughts/shared/research/[relevant].md`
+- Related research: `shared/research/[relevant].md`
 - Similar implementation: `[file:line]`
 ````
 

@@ -1,6 +1,6 @@
 ---
 name: bubat-sync-index
-description: Incrementally sync artifact lookup indexes after artifact write/update/delete. Use after stage outputs, triage artifacts, or bridge outputs change.
+description: Incrementally sync artifact lookup indexes after artifact write/update/delete. Use after stage outputs, triage artifacts, research docs, or bridge outputs change.
 ---
 
 # BUBAT Sync Index
@@ -20,6 +20,7 @@ Goal:
 Run after successful confirmed write for:
 - `stages/*/output/*`
 - `triage/*-impact.md`
+- `shared/research/*.md`
 - Stage 06 outputs such as `SPEC.md`, `openapi.yaml`, `{slug}.proto`, `{slug}-interfaces.*`, `{slug}-extraction-map.md`
 
 Do not run:
@@ -36,6 +37,7 @@ Given one or more changed workspace-relative paths:
   - `${WORKSPACE_ROOT}/shared/artifact-manifest.ndjson`
   - `${WORKSPACE_ROOT}/shared/artifact-index.json`
   - `${WORKSPACE_ROOT}/shared/triage-index.json`
+  - `${WORKSPACE_ROOT}/shared/research-index.json`
 
 ## Process
 
@@ -43,6 +45,7 @@ Given one or more changed workspace-relative paths:
 2. Classify each path:
    - `stage-output`
    - `triage`
+   - `codebase-research`
    - unsupported -> skip with note
 3. For each supported path:
    - if file exists, read only enough to refresh metadata:
@@ -50,6 +53,7 @@ Given one or more changed workspace-relative paths:
      - first non-empty paragraph for summary
      - up to 4 headings for detail index
      - compact keywords
+     - for research docs, frontmatter metadata plus compact `code_refs` and `artifacts`
    - if file no longer exists, remove matching entry from relevant index files
 4. Update indexes incrementally:
    - `shared/artifact-manifest.ndjson`
@@ -59,17 +63,21 @@ Given one or more changed workspace-relative paths:
      - replace existing object for same path or append new object
    - `shared/triage-index.json`
      - replace existing object for same path or append new object
+   - `shared/research-index.json`
+     - replace existing object for same path or append new object
 5. Preserve other entries unchanged.
 6. Keep manifest tiny:
    - fields only `path`, `stage`, `artifact`, `title`, `keywords`
    - max 5 keywords
 7. Keep detail indexes compact:
-   - `summary` max 160 chars
-   - headings max 6 for stage outputs, max 4 for triage
-   - keywords max 12 for stage outputs, max 8 for triage
+   - `summary` max 160 chars for artifacts/triage, max 200 chars for research
+   - headings max 6 for stage outputs, max 4 for triage/research
+   - keywords max 12 for stage outputs/research, max 8 for triage
+   - research `code_refs` max 12, `artifacts` max 8
 8. Sort touched index file after update:
    - stage-output entries by pipeline order then path
    - triage entries newest-first or path order if date unclear
+   - research entries newest-first by frontmatter date or filename date
 9. Report updated/removed/skipped paths.
 
 ## Output
@@ -82,6 +90,7 @@ Index sync complete.
 - manifest: shared/artifact-manifest.ndjson
 - artifact detail: shared/artifact-index.json
 - triage detail: shared/triage-index.json
+- research detail: shared/research-index.json
 ```
 
 ## Rule

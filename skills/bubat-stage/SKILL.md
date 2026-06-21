@@ -20,13 +20,17 @@ Given a stage id or shortcut (`04`, `component`, `04-component`, etc.):
 6. Check `${WORKSPACE_ROOT}/raw/MANIFEST.md`; load raw rows matching exact stage id.
 7. Read current stage `${WORKSPACE_ROOT}/stages/<stage-id>/CONTEXT.md` for stage-specific rules only.
 8. Load required upstream inputs and references from stage index.
-9. If workspace targets existing project codebase (`project_path` set or code exists nearby), invoke `@commands/cl/research_codebase.md` with stage-focused query before synthesis to improve precision.
+9. If workspace targets existing project codebase (`project_path` set or code exists nearby):
+   - read `${WORKSPACE_ROOT}/shared/research-index.json` if present to find prior research matching current stage/topic/code refs
+   - load only compact relevant sections from `${WORKSPACE_ROOT}/shared/research/*.md` (summary, code references, open questions) as a map
+   - invoke `@commands/cl/research_codebase.md` with stage-focused query before synthesis to improve precision and fresh-validate live code
+   - require saved research output under `${WORKSPACE_ROOT}/shared/research/`; keep the saved path for index sync and reporting
 10. Execute stage-specific process.
 11. Present checkpoint before saving.
 12. Run audit, placeholder, traceability, and diagram gates as applicable.
 13. Write outputs listed in output catalog.
-14. After confirmed writes, invoke `skills/bubat-sync-index` for changed output paths.
-15. Report output files and downstream stages likely affected.
+14. After confirmed writes, invoke `skills/bubat-sync-index` for changed output paths and any saved `${WORKSPACE_ROOT}/shared/research/*.md` path from step 9.
+15. Report output files, saved research path if created, and downstream stages likely affected.
 
 ## Shortcuts
 
