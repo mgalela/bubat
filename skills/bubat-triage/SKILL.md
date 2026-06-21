@@ -5,18 +5,23 @@ description: Map feature/change request to affected BUBAT stages, architecture a
 
 # BUBAT Triage
 
+Resolve `WORKSPACE_ROOT` first:
+- use `.` if `shared/stage-index.md` exists in current directory
+- else use `.bubat` if `.bubat/shared/stage-index.md` exists
+- else stop and ask user to confirm BUBAT workspace root
+
 Given the idea description from the user:
 
-1. Load source-of-truth rules from `shared/architecture-source-of-truth.md`.
+1. Load source-of-truth rules from `${WORKSPACE_ROOT}/shared/architecture-source-of-truth.md`.
 2. Load architecture artifacts if present:
-   - `stages/01-discovery/output/*.md`
-   - `stages/01b-flow/output/*.md`
-   - `stages/01c-bounded-context/output/*.md`
-   - `stages/01d-data-model/output/*.md`
-   - `stages/02-context/output/*.md`
-   - `stages/03-container/output/*.md`
-   - `stages/04-component/output/*.md`
-   - especially `stages/04-component/output/*-component-code-map.md`
+   - `${WORKSPACE_ROOT}/stages/01-discovery/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/01b-flow/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/01c-bounded-context/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/01d-data-model/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/02-context/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/03-container/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/04-component/output/*.md`
+   - especially `${WORKSPACE_ROOT}/stages/04-component/output/*-component-code-map.md`
 3. Classify request into one **change class** using Change Class table below.
 4. Map it to one or more **entry stages** using Signal Table below. An idea may have multiple entry stages if it spans topics.
 5. Determine **cascade stages**: all stages downstream of earliest affected stage in pipeline order.
@@ -37,7 +42,7 @@ Given the idea description from the user:
    - interface specs to regenerate
    - tests to scaffold/update
 9. Write triage artifact from `change-impact-template.md` to:
-   `triage/{{YYYYMMDD}}-{{feature-slug}}-impact.md`
+   `${WORKSPACE_ROOT}/triage/{{YYYYMMDD}}-{{feature-slug}}-impact.md`
 10. Present the triage report:
 
 ```
@@ -48,7 +53,7 @@ Triage: "<idea description>"
   Cascade stages   →  <stage-id>: AFFECTED / likely unaffected
   Impacted code    →  <file path#lines or [new file needed]>
   Cavekit handoff  →  SPEC sections + files/contracts/tests
-  Impact artifact  →  triage/<date>-<feature>-impact.md
+  Impact artifact  →  ${WORKSPACE_ROOT}/triage/<date>-<feature>-impact.md
 
   Minimum update:  update <stage-ids in pipeline order>
   Then:            bridge
@@ -94,4 +99,4 @@ Cascade always includes `06-spec` when any stage 01–04-component is affected b
 
 ## Source-of-Truth Rule
 
-Architecture-significant feature requests must update BUBAT stages before cavekit/code implementation. After implementation, run `update 04` to refresh `component-code-map.md`; then run `bridge` again if SPEC task pointers changed.
+Architecture-significant feature requests must update BUBAT stages before cavekit/code implementation. After implementation, run `update 04` to refresh `${WORKSPACE_ROOT}/stages/04-component/output/*-component-code-map.md`; then run `bridge` again if SPEC task pointers changed.

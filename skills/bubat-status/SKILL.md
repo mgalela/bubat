@@ -5,16 +5,21 @@ description: Show BUBAT pipeline completion status using shared stage index and 
 
 # BUBAT Status
 
+Resolve `WORKSPACE_ROOT` first:
+- use `.` if `shared/stage-index.md` exists in current directory
+- else use `.bubat` if `.bubat/shared/stage-index.md` exists
+- else stop and ask user to confirm BUBAT workspace root
+
 Use shared registries; do not hardcode artifact lists.
 
 ## Process
 
-1. Read `shared/stage-index.md` for pipeline order.
-2. Read `shared/output-catalog.md` for Completion Criteria and expected artifacts per owner stage.
-3. Read `shared/system-meta.md` to infer `{slug}` if available.
+1. Read `${WORKSPACE_ROOT}/shared/stage-index.md` for pipeline order.
+2. Read `${WORKSPACE_ROOT}/shared/output-catalog.md` for Completion Criteria and expected artifacts per owner stage.
+3. Read `${WORKSPACE_ROOT}/shared/system-meta.md` to infer `{slug}` if available.
 4. For each stage in pipeline order:
    - Find expected outputs from Completion Criteria first; use Artifact Catalog as fallback.
-   - Check `stages/<stage>/output/` for files beyond `.gitkeep`.
+   - Check `${WORKSPACE_ROOT}/stages/<stage>/output/` for files beyond `.gitkeep`.
    - Prefer matching expected artifact names when `{slug}` is known.
    - Mark:
      - `COMPLETE` if required owner-stage outputs exist.
@@ -22,7 +27,7 @@ Use shared registries; do not hardcode artifact lists.
      - `PENDING` if no real output files exist.
      - `BLOCKED` if upstream required stage is `PENDING`.
 5. Also check:
-   - `triage/*-impact.md` count
+   - `${WORKSPACE_ROOT}/triage/*-impact.md` count
    - Stage 04 code map existence
    - Stage 06 `SPEC.md` existence
    - Stage 07 Blocking findings if validation report exists

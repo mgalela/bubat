@@ -3,6 +3,11 @@
 Architecture documentation workspace using C4 model, built on ICM conventions.
 Stages `01–04` are architecture source of truth; Stage `06` bridges to cavekit.
 
+Workspace root rule:
+- standalone install: workspace root = current directory
+- embedded install (`--dir .bubat`): workspace root = `.bubat/`
+- resolve workspace root before reading `shared/`, `stages/`, `raw/`, `triage/`, `setup/`
+
 ## Always Use Registries
 
 - Run protocol: `shared/stage-runbook.md`
@@ -57,3 +62,7 @@ raw/     source materials routed by manifest
 triage/  feature/change impact reports
 setup/   onboarding questionnaire
 ```
+
+Raw path note:
+- standalone: `raw/`
+- embedded: `.bubat/raw/`

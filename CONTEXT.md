@@ -2,6 +2,11 @@
 
 BUBAT documents architecture through C4 stages, then bridges to cavekit `SPEC.md`.
 
+Workspace root rule:
+- standalone install: workspace root = current directory
+- embedded install (`--dir .bubat`): workspace root = `.bubat/`
+- skills should resolve workspace root before reading `shared/`, `stages/`, `raw/`, `triage/`, `setup/`
+
 ## Use These Registries
 
 | Need | File |
@@ -18,6 +23,10 @@ BUBAT documents architecture through C4 stages, then bridges to cavekit `SPEC.md
 |------|-----------------|
 | Run stage | `stage <id>` → `skills/bubat-stage/SKILL.md` |
 | Route raw files | `raw route` → `skills/bubat-raw-route/SKILL.md` |
+
+Raw path note:
+- standalone: `raw/`
+- embedded: `.bubat/raw/`
 | Show status | `status` → `skills/bubat-status/SKILL.md` |
 | Re-render diagram | `diagram <stage>` → `skills/bubat-diagram/SKILL.md` |
 | Update after change | `update <stage(s)>` → `skills/bubat-update/SKILL.md` |

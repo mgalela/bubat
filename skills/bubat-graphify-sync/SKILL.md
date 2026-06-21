@@ -5,43 +5,48 @@ description: Sync completed BUBAT stage outputs back into project graphify graph
 
 # BUBAT Graphify Sync
 
+Resolve `WORKSPACE_ROOT` first:
+- use `.` if `shared/stage-index.md` exists in current directory
+- else use `.bubat` if `.bubat/shared/stage-index.md` exists
+- else stop and ask user to confirm BUBAT workspace root
+
 ## Prerequisites
 
-- `project_path` set in `shared/system-meta.md`
+- `project_path` set in `${WORKSPACE_ROOT}/shared/system-meta.md`
 - `<project_path>/graphify-out/graph.json` exists
-- at least one `stages/*/output/*.md` exists
+- at least one `${WORKSPACE_ROOT}/stages/*/output/*.md` exists
 
 ## Process
 
-1. Read `shared/system-meta.md` and get `project_path`.
+1. Read `${WORKSPACE_ROOT}/shared/system-meta.md` and get `project_path`.
    - If missing or `Not provided`, stop: `Set project_path first by running setup.`
 2. Check `<project_path>/graphify-out/graph.json`.
    - If missing, stop: `Run graphify <project_path> first to initialize project graph.`
 3. Collect BUBAT output files:
-   - `stages/01-discovery/output/*.md`
-   - `stages/01b-flow/output/*.md`
-   - `stages/01c-bounded-context/output/*.md`
-   - `stages/01d-data-model/output/*.md`
-   - `stages/02-context/output/*.md`
-   - `stages/03-container/output/*.md`
-   - `stages/04-component/output/*.md`
-   - `stages/05-document/output/*.md`
-   - `triage/*-impact.md`
+   - `${WORKSPACE_ROOT}/stages/01-discovery/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/01b-flow/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/01c-bounded-context/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/01d-data-model/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/02-context/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/03-container/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/04-component/output/*.md`
+   - `${WORKSPACE_ROOT}/stages/05-document/output/*.md`
+   - `${WORKSPACE_ROOT}/triage/*-impact.md`
 4. Present count and destination:
    `Found N BUBAT files across X sources. Copy to <project_path>/docs/architecture/bubat/ and run graphify update. Proceed?`
 5. On confirmation:
 
 ```bash
 mkdir -p <project_path>/docs/architecture/bubat
-cp stages/01-discovery/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
-cp stages/01b-flow/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
-cp stages/01c-bounded-context/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
-cp stages/01d-data-model/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
-cp stages/02-context/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
-cp stages/03-container/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
-cp stages/04-component/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
-cp stages/05-document/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
-cp triage/*-impact.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+cp ${WORKSPACE_ROOT}/stages/01-discovery/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+cp ${WORKSPACE_ROOT}/stages/01b-flow/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+cp ${WORKSPACE_ROOT}/stages/01c-bounded-context/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+cp ${WORKSPACE_ROOT}/stages/01d-data-model/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+cp ${WORKSPACE_ROOT}/stages/02-context/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+cp ${WORKSPACE_ROOT}/stages/03-container/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+cp ${WORKSPACE_ROOT}/stages/04-component/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+cp ${WORKSPACE_ROOT}/stages/05-document/output/*.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
+cp ${WORKSPACE_ROOT}/triage/*-impact.md <project_path>/docs/architecture/bubat/ 2>/dev/null || true
 ```
 
 6. Run:

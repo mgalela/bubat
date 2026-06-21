@@ -60,6 +60,11 @@ Then add the printed line to your project `CLAUDE.md`:
 @.bubat/CLAUDE.md
 ```
 
+Embed mode note:
+- workspace files live under `.bubat/`
+- raw files go in `.bubat/raw/`
+- triggers may be run from project root after skill update, or from `.bubat/` directly
+
 **Update an existing workspace** (preserves user data, updates framework files):
 
 ```bash
@@ -98,9 +103,19 @@ setup
 
 **Have existing docs (PRD, ADRs, diagrams, API specs)?**
 
+Standalone workspace:
+
 ```
 1. Drop files into raw/
 2. raw route
+3. setup
+```
+
+Embedded workspace (`--dir .bubat`):
+
+```
+1. Drop files into .bubat/raw/
+2. Run raw route from project root or cd .bubat first
 3. setup
 ```
 
@@ -137,7 +152,7 @@ bridge
 | ------------------- | ---------------------------------------------------------------------------------------------- |
 | `setup`             | Onboarding — collect system info, populate `shared/system-meta.md`                             |
 | `stage <id>`        | Run a stage using shared stage registry — e.g. `stage 04`                                      |
-| `raw route`         | Scan `raw/`, assign each file to stage(s), write `raw/MANIFEST.md`                             |
+| `raw route`         | Scan workspace `raw/`, assign each file to stage(s), write workspace `raw/MANIFEST.md`         |
 | `status`            | Show pipeline completion across all stages                                                     |
 | `bridge`            | Run stage 06-spec — convert all outputs into `SPEC.md` + interface specs                       |
 | `diagram <stage>`   | Re-render diagrams for a stage without re-running the full stage                               |
@@ -218,7 +233,11 @@ Cross-stage gate rules live in `shared/stage-gates.md`.
 
 ## Raw Materials
 
-Drop any existing system documentation into `raw/` before running `setup`. Claude routes each file to the correct stage automatically.
+Drop existing system documentation into workspace `raw/` before running `setup`.
+- standalone: `raw/`
+- embedded: `.bubat/raw/`
+
+Claude routes each file to correct stage automatically.
 Requirements (BRD, PRD, problem statement), System docs (README, architecture doc, ADR log), API specs (OpenAPI/Swagger YAML, GraphQL schema, Postman collection), Process docs, Data docs (ERD, data dictionary, schema descriptions), Constraints (platform mandates, compliance requirements)
 
 ---

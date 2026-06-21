@@ -5,15 +5,20 @@ description: Run a BUBAT stage by id using the shared stage index and runbook. U
 
 # BUBAT Stage Runner
 
+Resolve `WORKSPACE_ROOT` first:
+- use `.` if `shared/stage-index.md` exists in current directory
+- else use `.bubat` if `.bubat/shared/stage-index.md` exists
+- else stop and ask user to confirm BUBAT workspace root
+
 Given a stage id or shortcut (`04`, `component`, `04-component`, etc.):
 
 1. Normalize requested stage using Shortcut + Alias tables below.
-2. Read `shared/stage-runbook.md`.
-3. Read `shared/stage-index.md` for current stage inputs, references, load boundaries, and outputs.
-4. Read `shared/output-catalog.md` for artifact names and consumers.
-5. Read `shared/stage-gates.md` and apply relevant gates.
-6. Check `raw/MANIFEST.md`; load raw rows matching exact stage id.
-7. Read current stage `stages/<stage-id>/CONTEXT.md` for stage-specific rules only.
+2. Read `${WORKSPACE_ROOT}/shared/stage-runbook.md`.
+3. Read `${WORKSPACE_ROOT}/shared/stage-index.md` for current stage inputs, references, load boundaries, and outputs.
+4. Read `${WORKSPACE_ROOT}/shared/output-catalog.md` for artifact names and consumers.
+5. Read `${WORKSPACE_ROOT}/shared/stage-gates.md` and apply relevant gates.
+6. Check `${WORKSPACE_ROOT}/raw/MANIFEST.md`; load raw rows matching exact stage id.
+7. Read current stage `${WORKSPACE_ROOT}/stages/<stage-id>/CONTEXT.md` for stage-specific rules only.
 8. Load required upstream inputs and references from stage index.
 9. Execute stage-specific process.
 10. Present checkpoint before saving.
@@ -53,8 +58,8 @@ Accept:
 - full ids: `04-component`
 - names: `component`, `container`, `spec`, `validation`
 
-If alias is ambiguous, ask user to choose. If unknown, list valid stage ids from `shared/stage-index.md`.
+If alias is ambiguous, ask user to choose. If unknown, list valid stage ids from `${WORKSPACE_ROOT}/shared/stage-index.md`.
 
 ## Rule
 
-Do not use `CLAUDE.md` load matrix. `shared/stage-index.md` is authoritative.
+Do not use `CLAUDE.md` load matrix. `${WORKSPACE_ROOT}/shared/stage-index.md` is authoritative.
