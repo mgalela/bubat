@@ -8,6 +8,9 @@ Purpose: build C4 Level 2 container diagram, container inventory, inter-containe
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#03-container`, `shared/output-catalog.md`, `shared/stage-gates.md`, and `shared/c4-notation.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to inspect services, databases, queues, deployment units, contracts, and inter-service communication before drafting outputs
+
 ## Stage-Specific Rules
 
 1. Load context diagram, data model, bounded context, and flow/scenario outputs.

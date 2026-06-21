@@ -8,6 +8,9 @@ Purpose: validate Stage 06 outputs for completeness, consistency, testability, a
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#07-spec-validation`, `shared/output-catalog.md`, and `shared/stage-gates.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to verify Stage 06 claims against existing contracts, modules, and test anchors before drafting outputs
+
 ## Stage-Specific Rules
 
 1. Load all files in `stages/06-spec/output/` plus `shared/system-meta.md`.

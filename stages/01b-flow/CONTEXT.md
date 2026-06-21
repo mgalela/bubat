@@ -8,6 +8,9 @@ Purpose: capture business flows, user journeys, and key scenarios for downstream
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#01b-flow`, `shared/output-catalog.md`, and `shared/stage-gates.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to inspect user flows, entrypoints, handlers, jobs, background paths, and error paths before drafting outputs
+
 ## Stage-Specific Rules
 
 1. Load discovery outputs and system metadata.

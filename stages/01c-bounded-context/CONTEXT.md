@@ -8,6 +8,9 @@ Purpose: identify bounded contexts, ubiquitous language, domain rules, and conte
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#01c-bounded-context`, `shared/output-catalog.md`, and `shared/stage-gates.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to inspect domain terms, modules, ownership boundaries, integration seams, and language used in code/docs before drafting outputs
+
 ## Stage-Specific Rules
 
 1. Load discovery and flow outputs.

@@ -8,6 +8,9 @@ Purpose: convert BUBAT architecture truth (`01–04`) into cavekit `SPEC.md`, in
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#06-spec`, `shared/output-catalog.md`, `shared/stage-gates.md`, and `skills/bubat-bridge/SKILL.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to inspect existing interfaces, API contracts, modules, task anchors, and implementation constraints before drafting outputs
+
 ## Stage-Specific References
 
 - `references/caveman-encoding.md`

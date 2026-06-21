@@ -8,6 +8,9 @@ Purpose: gather system boundary, users, external dependencies, NFRs, tech stack 
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#01-discovery`, `shared/output-catalog.md`, and `shared/stage-gates.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to inspect goals, actors, integrations, NFR signals, runtime boundaries, and supporting docs/code before drafting outputs
+
 ## Stage-Specific Rules
 
 1. Read `shared/system-meta.md`.

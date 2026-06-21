@@ -8,6 +8,9 @@ Purpose: derive framework-agnostic BDD, unit, integration, E2E scenarios and cov
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#08-test-scaffold`, `shared/output-catalog.md`, and `shared/stage-gates.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to inspect current test suites, fixtures, seams, and coverage anchors before drafting outputs
+
 ## Stage-Specific Rules
 
 1. Load Stage 07 validation report; stop if any Blocking findings exist.

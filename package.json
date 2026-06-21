@@ -12,6 +12,8 @@
   "files": [
     "bin/",
     "skills/",
+    "commands/",
+    "agents/",
     "CLAUDE.md",
     "CONTEXT.md",
     "README.md",

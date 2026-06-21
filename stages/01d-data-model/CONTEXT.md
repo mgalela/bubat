@@ -8,6 +8,9 @@ Purpose: convert bounded context aggregates into entity model, relationships, cr
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#01d-data-model`, `shared/output-catalog.md`, and `shared/stage-gates.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to inspect entities, schemas, migrations, persistence models, repositories, and invariants before drafting outputs
+
 ## Stage-Specific Rules
 
 1. Load bounded context and flow outputs.

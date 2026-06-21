@@ -26,10 +26,14 @@ Workspace root rule:
 | Route raw files | `raw route` → `skills/bubat-raw-route/SKILL.md` |
 | Show status | `status` → `skills/bubat-status/SKILL.md` |
 | Re-render diagram | `diagram <stage>` → `skills/bubat-diagram/SKILL.md` |
-| Update after change | `update <stage(s)>` → `skills/bubat-update/SKILL.md` |
+| Update after change | `update <stage(s)>` → `skills/bubat-update/SKILL.md` + `@commands/cl/research_codebase.md` on existing repos |
 | Triage feature/change | `triage <idea>` → `skills/bubat-triage/SKILL.md` |
 | Generate cavekit spec | `bridge` → `skills/bubat-bridge/SKILL.md` |
 | Sync architecture docs to graphify | `sync graphify` → `skills/bubat-graphify-sync/SKILL.md` |
+
+## Existing Project Precision
+
+If workspace attached to existing project, use `@commands/cl/research_codebase.md` during each stage for focused codebase exploration before drafting outputs.
 
 Raw path note:
 - standalone: `raw/`

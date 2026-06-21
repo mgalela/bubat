@@ -8,6 +8,9 @@ Purpose: assemble C4 levels, flows, contracts, decisions, and implementation tra
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#05-document`, `shared/output-catalog.md`, and `shared/stage-gates.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to cross-check assembled narrative against current repo structure, interfaces, and implementation trace before drafting outputs
+
 ## Stage-Specific Rules
 
 1. Load outputs from stages `01`, `01b`, `02`, `03`, and `04`.

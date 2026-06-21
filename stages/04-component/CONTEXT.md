@@ -8,6 +8,9 @@ Purpose: build C4 Level 3 component diagrams, component scope, component-level s
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#04-component`, `shared/output-catalog.md`, `shared/stage-gates.md`, and `shared/c4-notation.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to inspect modules, packages, handlers, jobs, adapters, interfaces, and file/symbol evidence before drafting outputs
+
 ## Stage-Specific Rules
 
 1. Load Stage 03 outputs, discovery tech decisions, and system metadata.

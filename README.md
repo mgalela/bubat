@@ -91,6 +91,11 @@ The script copies templates from the package version/tag that `npx` resolved, so
 Preserved on update: `shared/system-meta.md`, `raw/MANIFEST.md`, `raw/SOURCES.md`, `stages/*/output/*`.
 New stages added automatically.
 
+Existing project note:
+- use `@commands/cl/research_codebase.md` in each stage for targeted codebase exploration
+- useful for repos with existing code, docs, interfaces, migrations, tests
+- research findings improve stage precision; confirmed BUBAT outputs remain source of truth
+
 ---
 
 ## Quickstart
@@ -157,7 +162,7 @@ bridge
 | `status`            | Show pipeline completion across all stages                                                     |
 | `bridge`            | Run stage 06-spec — convert all outputs into `SPEC.md` + interface specs                       |
 | `diagram <stage>`   | Re-render diagrams for a stage without re-running the full stage                               |
-| `update <stage(s)>` | Re-run stages after system changes — e.g. `update 03 04 05`                                    |
+| `update <stage(s)>` | Re-run stages after system changes — uses stage-focused codebase research on existing repos     |
 | `triage <idea>`     | Map feature/change request to impacted architecture stages, code map rows, and cavekit handoff |
 | `sync graphify`     | Feed completed stage outputs back into the project graphify graph                              |
 
@@ -187,6 +192,10 @@ BUBAT/
 │   ├── bubat-triage/             triage skill
 │   ├── bubat-bridge/             cavekit bridge skill
 │   └── bubat-graphify-sync/      graphify sync skill
+├── commands/                     reusable command prompts
+│   └── cl/research_codebase.md   focused codebase exploration for existing projects
+├── agents/                       specialist sub-agents used by commands
+│   └── cl/...                    locator / analyzer / pattern finder / web research
 ├── shared/
 │   ├── system-meta.md            system name, purpose, tech stack, interface formats
 │   ├── c4-notation.md            C4 element rules and naming conventions
@@ -245,6 +254,32 @@ Claude routes each file to correct stage automatically.
 Requirements (BRD, PRD, problem statement), System docs (README, architecture doc, ADR log), API specs (OpenAPI/Swagger YAML, GraphQL schema, Postman collection), Process docs, Data docs (ERD, data dictionary, schema descriptions), Constraints (platform mandates, compliance requirements)
 
 ---
+
+## Existing Project Workflow
+
+For existing repos, combine raw docs + codebase research:
+
+```text
+raw add docs/
+raw route
+setup
+stage <id>
+→ use @commands/cl/research_codebase.md with stage-focused question
+→ confirm checkpoint
+```
+
+Suggested stage research prompts:
+- `01-discovery` → goals, actors, integrations, NFR signals, runtime boundaries
+- `01b-flow` → user flows, business paths, entrypoints, error paths
+- `01c-bounded-context` → domain terms, modules, ownership boundaries
+- `01d-data-model` → entities, schemas, migrations, persistence patterns
+- `02-context` → external systems, inbound/outbound dependencies
+- `03-container` → services, databases, queues, deployment units, contracts
+- `04-component` → modules, packages, handlers, jobs, code map evidence
+- `05-document` → cross-check assembled narrative against live repo facts
+- `06-spec` → existing interfaces, OpenAPI/proto/contracts, task anchors
+- `07-spec-validation` → verify spec coverage against live implementation evidence
+- `08-test-scaffold` → inspect current test patterns, fixtures, coverage anchors
 
 ## Implementation Reference
 
@@ -367,3 +402,5 @@ Triggers are implemented as installable Claude Code skills. `create-bubat` insta
 | `bubat-graphify-sync` | `sync graphify`     |
 
 Skills are standalone — they can be updated independently of the workspace via `npx create-bubat --update`.
+
+For existing project exploration, also use `commands/cl/research_codebase.md` with installed `agents/cl/*` helpers.

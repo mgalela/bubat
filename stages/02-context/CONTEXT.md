@@ -8,6 +8,9 @@ Purpose: build C4 Level 1 system context diagram and narrative.
 
 Use `shared/stage-runbook.md`, `shared/stage-index.md#02-context`, `shared/output-catalog.md`, `shared/stage-gates.md`, and `shared/c4-notation.md`.
 
+Existing project precision:
+- if `project_path` targets live repo, use `@commands/cl/research_codebase.md` to inspect external systems, inbound/outbound dependencies, auth boundaries, and runtime edges before drafting outputs
+
 ## Stage-Specific Rules
 
 1. Load discovery and bounded-context outputs.
