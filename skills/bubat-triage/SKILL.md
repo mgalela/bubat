@@ -43,7 +43,8 @@ Given the idea description from the user:
    - tests to scaffold/update
 9. Write triage artifact from `change-impact-template.md` to:
    `${WORKSPACE_ROOT}/triage/{{YYYYMMDD}}-{{feature-slug}}-impact.md`
-10. Present the triage report:
+10. After confirmed write, invoke `skills/bubat-sync-index` for created/updated triage artifact.
+11. Present the triage report:
 
 ```
 Triage: "<idea description>"
@@ -61,8 +62,8 @@ Triage: "<idea description>"
   Proceed? [y/n]
 ```
 
-11. If user confirms (`y`), invoke skill `bubat-update` with minimum update set automatically.
-12. If user declines (`n`), leave stage artifacts unchanged but keep triage impact artifact unless user asks to delete it.
+12. If user confirms (`y`), invoke skill `bubat-update` with minimum update set automatically.
+13. If user declines (`n`), leave stage artifacts unchanged but keep triage impact artifact unless user asks to delete it.
 
 ## Change Class Table
 

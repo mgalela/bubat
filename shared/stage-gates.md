@@ -29,11 +29,22 @@ Stage 06 (`bridge`) may be run before Stage 05 -- it does not depend on `05-docu
 
 | Artifact Type | Rerun Behavior |
 |---------------|----------------|
-| Stage output files | overwrite whole artifact after checkpoint confirmation |
+| Stage output markdown files | default `update` behavior = section-level patch after checkpoint confirmation; preserve untouched sections byte-for-byte when heading/block structure is stable |
+| Stage output files with unstable structure or broad change | switch to full overwrite after checkpoint confirmation |
 | Diagram-only update | replace diagram block only; preserve narrative/tables |
 | Tech decisions log | append-only; if decision changed, append new ADR with `Supersedes: ADR-NNN` |
 | Raw manifest | overwrite generated table after review confirmation |
-| Interface spec files (openapi.yaml, .proto, -interfaces.*) | overwrite whole file after checkpoint confirmation |
+| Interface spec files (openapi.yaml, .proto, -interfaces.*) | overwrite whole file after checkpoint confirmation unless stage-specific safe patch rule exists |
+
+## Patch Safety Rule
+
+Partial update allowed only if all conditions hold:
+- artifact uses stable headings or block markers
+- changed scope traceable to current triage/update intent
+- unchanged sections can be preserved without hidden contradiction
+- patch preview shown before save
+
+If section boundaries moved, artifact outline changed, or patch would touch many coupled sections, abandon patch mode and rewrite whole artifact.
 
 ## Architecture Source-of-Truth Rule
 

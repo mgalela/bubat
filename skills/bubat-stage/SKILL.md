@@ -20,11 +20,13 @@ Given a stage id or shortcut (`04`, `component`, `04-component`, etc.):
 6. Check `${WORKSPACE_ROOT}/raw/MANIFEST.md`; load raw rows matching exact stage id.
 7. Read current stage `${WORKSPACE_ROOT}/stages/<stage-id>/CONTEXT.md` for stage-specific rules only.
 8. Load required upstream inputs and references from stage index.
-9. Execute stage-specific process.
-10. Present checkpoint before saving.
-11. Run audit, placeholder, traceability, and diagram gates as applicable.
-12. Write outputs listed in output catalog.
-13. Report output files and downstream stages likely affected.
+9. If workspace targets existing project codebase (`project_path` set or code exists nearby), invoke `@commands/cl/research_codebase.md` with stage-focused query before synthesis to improve precision.
+10. Execute stage-specific process.
+11. Present checkpoint before saving.
+12. Run audit, placeholder, traceability, and diagram gates as applicable.
+13. Write outputs listed in output catalog.
+14. After confirmed writes, invoke `skills/bubat-sync-index` for changed output paths.
+15. Report output files and downstream stages likely affected.
 
 ## Shortcuts
 

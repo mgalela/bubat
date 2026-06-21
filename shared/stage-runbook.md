@@ -8,12 +8,14 @@ Common protocol for running any BUBAT stage.
 2. Read `shared/stage-index.md` for current stage inputs, references, outputs, and downstream consumers.
 3. Check `raw/MANIFEST.md`; load only rows whose `Stages` contains current exact stage id.
 4. Load required upstream artifacts and stage references.
-5. If required inputs are missing, stop unless stage explicitly allows missing markers.
-6. Execute stage-specific rules from `stages/<stage>/CONTEXT.md`.
-7. Present checkpoint(s) before writing outputs.
-8. Run stage audit plus placeholder and traceability gates.
-9. Save outputs to `stages/<stage>/output/`.
-10. Append ADR/tech decision entries only when rules require; never overwrite tech decisions log.
+5. If `project_path` points to existing codebase, use `@commands/cl/research_codebase.md` before stage synthesis to perform focused codebase exploration for current stage. Use findings as evidence source, not replacement for upstream artifacts or raw materials.
+6. If required inputs are missing, stop unless stage explicitly allows missing markers.
+7. Execute stage-specific rules from `stages/<stage>/CONTEXT.md`.
+8. Present checkpoint(s) before writing outputs.
+9. Run stage audit plus placeholder and traceability gates.
+10. Save outputs to `stages/<stage>/output/`.
+11. After successful confirmed save, incrementally sync changed output paths into lookup indexes via `skills/bubat-sync-index`.
+12. Append ADR/tech decision entries only when rules require; never overwrite tech decisions log.
 
 ## Source-of-Truth Protocol
 
@@ -29,7 +31,18 @@ See `shared/architecture-source-of-truth.md`.
 
 ## Checkpoint Rule
 
-Do not overwrite stage outputs until user confirms checkpoint result.
+Do not overwrite or patch stage outputs until user confirms checkpoint result.
+
+For `update` runs in patch mode:
+- show changed sections first
+- show diff summary before write
+- preserve untouched sections exactly
+- switch to full rewrite if patch safety rule fails
+
+Index sync rule:
+- sync indexes only after confirmed final write
+- do not sync preview/dry-run output
+- if incremental sync fails, keep artifact write and recommend `refresh index`
 
 ## Missing Input Rule
 
