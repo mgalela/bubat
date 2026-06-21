@@ -22,6 +22,7 @@ Workspace root rule:
 |---------|--------|
 | `setup` | run onboarding; populate `shared/system-meta.md` |
 | `stage <id>` | invoke `skills/bubat-stage` |
+| `raw add <path>` | invoke `skills/bubat-raw-add` |
 | `raw route` | invoke `skills/bubat-raw-route` |
 | `status` | invoke `skills/bubat-status` |
 | `diagram <stage>` | invoke `skills/bubat-diagram` |
@@ -66,3 +67,4 @@ setup/   onboarding questionnaire
 Raw path note:
 - standalone: `raw/`
 - embedded: `.bubat/raw/`
+- optional external sources: register with `raw add <path>`

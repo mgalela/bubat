@@ -22,17 +22,19 @@ Workspace root rule:
 | Task | Trigger / Skill |
 |------|-----------------|
 | Run stage | `stage <id>` → `skills/bubat-stage/SKILL.md` |
+| Add external raw source | `raw add <path>` → `skills/bubat-raw-add/SKILL.md` |
 | Route raw files | `raw route` → `skills/bubat-raw-route/SKILL.md` |
-
-Raw path note:
-- standalone: `raw/`
-- embedded: `.bubat/raw/`
 | Show status | `status` → `skills/bubat-status/SKILL.md` |
 | Re-render diagram | `diagram <stage>` → `skills/bubat-diagram/SKILL.md` |
 | Update after change | `update <stage(s)>` → `skills/bubat-update/SKILL.md` |
 | Triage feature/change | `triage <idea>` → `skills/bubat-triage/SKILL.md` |
 | Generate cavekit spec | `bridge` → `skills/bubat-bridge/SKILL.md` |
 | Sync architecture docs to graphify | `sync graphify` → `skills/bubat-graphify-sync/SKILL.md` |
+
+Raw path note:
+- standalone: `raw/`
+- embedded: `.bubat/raw/`
+- optional external sources: register with `raw add <path>`
 
 ## Source-of-Truth Loop
 

@@ -34,7 +34,7 @@ if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
   console.log('  npx github:mgalela/bubat#v1.0.0 my-arch');
   console.log('  npx github:mgalela/bubat#v1.0.0 --update my-arch');
   console.log('');
-  console.log('Update preserves: shared/system-meta.md, raw/MANIFEST.md, stages/*/output/*');
+  console.log('Update preserves: shared/system-meta.md, raw/MANIFEST.md, raw/SOURCES.md, stages/*/output/*');
   process.exit(0);
 }
 
@@ -76,6 +76,7 @@ const COPY_EXCLUDE = new Set([
 const USER_DATA_FILES = new Set([
   path.join('shared', 'system-meta.md'),
   path.join('raw', 'MANIFEST.md'),
+  path.join('raw', 'SOURCES.md'),
 ]);
 
 // Returns true for files inside stages/*/output/ that are NOT .gitkeep.

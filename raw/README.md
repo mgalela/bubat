@@ -2,6 +2,8 @@
 
 Drop existing materials here before running any stage. Run `raw route` -- Claude scans each file, decides which stage(s) it's most relevant to, and writes `MANIFEST.md`.
 
+If docs already live outside this folder, register path first with `raw add <path>`.
+
 ## What belongs here
 
 | Type              | Examples                                                   |
@@ -21,7 +23,8 @@ Drop existing materials here before running any stage. Run `raw route` -- Claude
 
 ## Workflow
 
-1. Drop files here
-2. Trigger: `raw route`
-3. Claude scans each file, determines relevant stage(s), writes `MANIFEST.md`
-4. Each stage reads only rows where `Stages` contains its exact stage id
+1. Drop files here, or register external source with `raw add <path>`
+2. Optional: review `SOURCES.md`
+3. Trigger: `raw route`
+4. Claude scans each file, determines relevant stage(s), writes `MANIFEST.md`
+5. Each stage reads only rows where `Stages` contains its exact stage id
