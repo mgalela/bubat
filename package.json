@@ -22,7 +22,9 @@
     "triage/",
     "setup/",
     "shared/",
-    "stages/"
+    "stages/",
+    "tools/",
+    "Makefile"
   ],
   "keywords": ["pi-package", "claude-code", "architecture", "c4", "documentation", "bubat"],
   "peerDependencies": {

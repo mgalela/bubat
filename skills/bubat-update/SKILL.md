@@ -40,14 +40,23 @@ Given the stage numbers specified:
    - If code was newly generated after prior design, rebuild same map in `generated` mode from generated files.
    - Keep rows for planned components whose implementation still does not exist: mark `[MISSING — implementation not yet generated]` rather than dropping them.
    - In `patch` mode, preserve unchanged narrative sections and replace only changed component rows/sections when mapping remains structurally stable.
-10. Use git as review guardrail, not source-of-truth engine:
+10. Special rule for `update 05`:
+   - Detect requested document mode from user text.
+   - If user says `fsd`, `functional spec`, `functional specification`, or `functional specification document`, treat FSD as **Functional Specification Document**.
+   - FSD is not file structure/design, code layout, or Stage 04 component breakdown.
+   - Generate or update `stages/05-document/output/{slug}-fsd.md` using `tools/docx-generator/templates/fsd-template.md` and source stages `01–04`.
+   - Do not ask user to choose artifact location for FSD unless multiple workspace roots/slugs are ambiguous.
+   - Do not modify Stage 04 for FSD requests unless user explicitly asks for component/code-map changes.
+   - If user says `architecture`, generate/update `stages/05-document/output/{slug}-architecture.md`.
+   - If user says only `update 05` with no mode, ask whether to update architecture, FSD, or both.
+11. Use git as review guardrail, not source-of-truth engine:
    - inspect candidate changes with `git diff -- <artifact>` when repo exists
    - use git history for rollback/audit if needed
    - do not infer semantic section impact from git alone
-11. After each confirmed artifact write/patch, invoke `skills/bubat-sync-index` for touched paths and any saved `${WORKSPACE_ROOT}/shared/research/*.md` paths from step 6.
-12. Append a note to `{slug}-tech-decisions.md` marking which stages were updated, why, whether mode was `patch` or `rewrite`, and which research docs were used/saved (ask user for reason).
-13. Sync tech-decisions artifact too if it was updated.
-14. After all stages complete, invoke skill `bubat-status` to confirm.
+12. After each confirmed artifact write/patch, invoke `skills/bubat-sync-index` for touched paths and any saved `${WORKSPACE_ROOT}/shared/research/*.md` paths from step 6.
+13. Append a note to `{slug}-tech-decisions.md` marking which stages were updated, why, whether mode was `patch` or `rewrite`, and which research docs were used/saved (ask user for reason).
+14. Sync tech-decisions artifact too if it was updated.
+15. After all stages complete, invoke skill `bubat-status` to confirm.
 
 Rule:
 - same existing-project precision rule as `stage <id>` applies during `update <stage(s)>`
