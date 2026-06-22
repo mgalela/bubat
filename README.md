@@ -42,6 +42,8 @@ raw/ → setup → 01-discovery → 01b-flow → 01c-bounded-context → 01d-dat
 
 ## Install
 
+### Claude Code
+
 **Standalone workspace** (open the created directory in Claude Code):
 
 ```bash
@@ -70,6 +72,37 @@ Embed mode note:
 ```bash
 npx create-bubat --update my-arch
 npx create-bubat --update --dir .bubat
+```
+
+### Pi coding agent
+
+BUBAT also works as a pi package. Install from a local checkout:
+
+```bash
+pi install /path/to/bubat
+```
+
+Or for one project only:
+
+```bash
+pi install -l /path/to/bubat
+```
+
+Pi loads:
+- `extensions/bubat.ts` for native trigger routing
+- `skills/*/SKILL.md` as `/skill:bubat-*`
+- `commands/cl/*.md` as prompt templates
+
+Useful pi prompts after install:
+
+```text
+status
+stage 04
+raw add ./docs/system.md
+raw route
+triage add payment retry
+bridge
+trace component-code-map
 ```
 
 **Install/update from a pinned release/tag** (not branch `main`):

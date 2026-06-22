@@ -11,6 +11,7 @@
   },
   "files": [
     "bin/",
+    "extensions/",
     "skills/",
     "commands/",
     "agents/",
@@ -23,7 +24,15 @@
     "shared/",
     "stages/"
   ],
-  "keywords": ["claude-code", "architecture", "c4", "documentation", "bubat"],
+  "keywords": ["pi-package", "claude-code", "architecture", "c4", "documentation", "bubat"],
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "pi": {
+    "extensions": ["./extensions"],
+    "skills": ["./skills"],
+    "prompts": ["./commands/cl/*.md"]
+  },
   "license": "MIT",
   "engines": {
     "node": ">=16"
