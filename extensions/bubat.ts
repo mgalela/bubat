@@ -10,6 +10,7 @@ const routes: Route[] = [
   { pattern: /^stage\s+(.+)$/i, skill: "bubat-stage", argFrom: 1 },
   { pattern: /^raw\s+add\s+(.+)$/i, skill: "bubat-raw-add", argFrom: 1 },
   { pattern: /^raw\s+route$/i, skill: "bubat-raw-route" },
+  { pattern: /^bubat-r\s+feed\s+bubat(?:\s+(.+))?$/i, skill: "bubat-r-feed-bubat", argFrom: 1 },
   { pattern: /^refresh\s+index$/i, skill: "bubat-refresh-index" },
   { pattern: /^sync\s+index\s+(.+)$/i, skill: "bubat-sync-index", argFrom: 1 },
   { pattern: /^diagram\s+(.+)$/i, skill: "bubat-diagram", argFrom: 1 },

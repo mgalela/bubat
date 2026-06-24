@@ -1,6 +1,6 @@
 # bubat-r feed bubat
 
-Prepare reconstruction outputs as BUBAT inputs.
+Deterministically prepare BUBAT-R reconstruction outputs as BUBAT inputs.
 
 ## Intent
 
@@ -8,25 +8,49 @@ Prepare reconstruction outputs as BUBAT inputs.
 bubat-r feed bubat [target-path]
 ```
 
+Default target path: `reconstruction/`.
+
 ## Protocol
 
-1. Verify `reconstruction/11-reference-design.md` exists.
-2. Verify `reconstruction/02-coverage-ledger.md` exists.
-3. Verify `reconstruction/12-drift-ambiguity-report.md` exists.
-4. Register reconstruction folder as raw source for BUBAT.
-5. Route artifacts to BUBAT stages.
+1. Resolve BUBAT workspace root.
+2. Resolve reconstruction folder.
+3. Verify primary files:
+   - `02-coverage-ledger.md`
+   - `11-reference-design.md`
+   - `12-drift-ambiguity-report.md`
+4. Register reconstruction folder in `raw/SOURCES.md`.
+5. Update `raw/MANIFEST.md` with a deterministic marker block.
+6. Preserve unrelated manifest rows.
+7. Replace existing block for same reconstruction path; never duplicate.
 
-## Mapping
+## Manifest Block
 
-| BUBAT-R Artifact | BUBAT Stage |
-|---|---|
-| evidence catalog | 01-discovery |
-| behavior spine | 01b-flow |
-| ownership map | 01c / 01d |
-| domain map | 01c |
-| runtime map | 02 / 03 |
-| contract map | 03 |
-| component map | 04 |
-| code trace map | 04 |
-| reference design | 01–04 seed |
-| drift report | gates/update notes |
+Use marker block:
+
+```md
+<!-- BEGIN BUBAT-R: <reconstruction-path> -->
+
+...
+
+<!-- END BUBAT-R: <reconstruction-path> -->
+```
+
+## Fixed Mapping
+
+| BUBAT-R Artifact               | BUBAT Stages                                                                                                       | Purpose                                       |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------- |
+| `01-evidence-catalog.md`       | `01-discovery, 04-component`                                                                                       | evidence/source catalog                       |
+| `02-coverage-ledger.md`        | `01-discovery, 01b-flow, 01c-bounded-context, 01d-data-model, 02-context, 03-container, 04-component`              | coverage/confidence; primary input            |
+| `03-main-spine.md`             | `02-context, 03-container, 04-component`                                                                           | main execution spine                          |
+| `04-runtime-map.md`            | `02-context, 03-container`                                                                                         | runtime/deploy topology                       |
+| `05-behavior-spine.md`         | `01b-flow, 03-container, 04-component`                                                                             | behavior/scenario spine                       |
+| `06-ownership-map.md`          | `01c-bounded-context, 03-container, 04-component`                                                                  | ownership/module/service boundaries           |
+| `07-domain-map.md`             | `01c-bounded-context, 01d-data-model`                                                                              | domain terms, aggregates, entities            |
+| `08-contract-map.md`           | `03-container, 04-component, 06-spec`                                                                              | APIs/events/contracts                         |
+| `09-component-map.md`          | `04-component`                                                                                                     | component/module map                          |
+| `10-code-trace-map.md`         | `04-component`                                                                                                     | component-to-code trace                       |
+| `11-reference-design.md`       | `01-discovery, 01b-flow, 01c-bounded-context, 01d-data-model, 02-context, 03-container, 04-component, 05-document` | reconstructed reference design; primary input |
+| `12-drift-ambiguity-report.md` | `01-discovery, 02-context, 03-container, 04-component`                                                             | drift, ambiguity, unknowns; primary input     |
+| `13-readiness-verdict.md`      | `01-discovery, 05-document`                                                                                        | takeover/change readiness                     |
+| `gaps/*.md`                    | `01-discovery, 02-context, 03-container, 04-component`                                                             | deep gap evidence                             |
+| `docs-feed/*.md`               | `01-discovery, 02-context, 03-container, 04-component`                                                             | verified late/stale document claims           |

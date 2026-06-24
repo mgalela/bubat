@@ -454,6 +454,7 @@ Triggers are implemented as installable Claude Code skills. `create-bubat` insta
 | `bubat-stage`         | `stage <id>`        |
 | `bubat-raw-add`       | `raw add <path>`    |
 | `bubat-raw-route`     | `raw route`         |
+| `bubat-r-feed-bubat`  | `bubat-r feed bubat [path]` |
 | `bubat-status`        | `status`            |
 | `bubat-diagram`       | `diagram <stage>`   |
 | `bubat-update`        | `update <stage(s)>` |

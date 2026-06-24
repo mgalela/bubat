@@ -217,11 +217,9 @@ Use after BUBAT-R stabilizes reference design.
 bubat-r feed bubat
 ```
 
-Manual equivalent:
+Command updates `raw/SOURCES.md` and `raw/MANIFEST.md` with deterministic BUBAT-R mappings, then run:
 
 ```text
-raw add <project>/reconstruction
-raw route
 stage 01
 stage 01b
 stage 01c
@@ -286,8 +284,7 @@ Then follow `bubat-r/workflow.md`.
 After reconstruction stabilizes:
 
 ```text
-raw add <project>/reconstruction
-raw route
+bubat-r feed bubat <project>/reconstruction
 stage 01
 stage 01b
 stage 01c
@@ -297,4 +294,4 @@ stage 03
 stage 04
 ```
 
-Use `reconstruction/11-reference-design.md`, `02-coverage-ledger.md`, and `12-drift-ambiguity-report.md` as primary inputs.
+Command writes fixed rows into `raw/MANIFEST.md`. Primary inputs remain `reconstruction/11-reference-design.md`, `02-coverage-ledger.md`, and `12-drift-ambiguity-report.md`.

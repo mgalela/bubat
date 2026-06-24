@@ -24,6 +24,7 @@ Workspace root rule:
 | Run stage | `stage <id>` → `skills/bubat-stage/SKILL.md` |
 | Add external raw source | `raw add <path>` → `skills/bubat-raw-add/SKILL.md` |
 | Route raw files | `raw route` → `skills/bubat-raw-route/SKILL.md` |
+| Feed BUBAT-R reconstruction | `bubat-r feed bubat [path]` → `skills/bubat-r-feed-bubat/SKILL.md` |
 | Show status | `status` → `skills/bubat-status/SKILL.md` |
 | Re-render diagram | `diagram <stage>` → `skills/bubat-diagram/SKILL.md` |
 | Update after change | `update <stage(s)>` → `skills/bubat-update/SKILL.md` + `@commands/cl/research_codebase.md` on existing repos |

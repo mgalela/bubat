@@ -13,6 +13,7 @@
     "bin/",
     "extensions/",
     "skills/",
+    "bubat-r/",
     "commands/",
     "agents/",
     "CLAUDE.md",

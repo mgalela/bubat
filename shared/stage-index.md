@@ -45,6 +45,7 @@ Registry for stage routing, inputs, references, outputs, and downstream dependen
 | `stage <id>` | `skills/bubat-stage/SKILL.md` |
 | `setup` | setup questionnaire |
 | `raw route` | `skills/bubat-raw-route/SKILL.md` |
+| `bubat-r feed bubat [path]` | `skills/bubat-r-feed-bubat/SKILL.md` |
 | `status` | `skills/bubat-status/SKILL.md` |
 | `where <term>` / `trace <term>` / `find artifact <term>` | `skills/bubat-trace/SKILL.md` |
 | `refresh index` | `skills/bubat-refresh-index/SKILL.md` |
