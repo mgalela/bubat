@@ -2,21 +2,37 @@
   "name": "create-bubat",
   "version": "1.0.0",
   "description": "Scaffold BUBAT architecture documentation workspace for Claude Code",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgalela/bubat.git"
+  },
   "bin": {
     "create-bubat": "./bin/create.js"
   },
   "files": [
     "bin/",
+    "extensions/",
     "skills/",
+    "commands/",
+    "agents/",
     "CLAUDE.md",
     "CONTEXT.md",
     "README.md",
     "raw/",
+    "triage/",
     "setup/",
     "shared/",
     "stages/"
   ],
-  "keywords": ["claude-code", "architecture", "c4", "documentation", "bubat"],
+  "keywords": ["pi-package", "claude-code", "architecture", "c4", "documentation", "bubat"],
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "pi": {
+    "extensions": ["./extensions"],
+    "skills": ["./skills"],
+    "prompts": ["./commands/cl/*.md"]
+  },
   "license": "MIT",
   "engines": {
     "node": ">=16"

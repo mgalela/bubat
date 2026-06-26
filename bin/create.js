@@ -7,6 +7,12 @@ const path = require('path');
 const os = require('os');
 
 const args = process.argv.slice(2);
+const pkg = require('../package.json');
+
+if (args.includes('--version') || args.includes('-v')) {
+  console.log(pkg.version);
+  process.exit(0);
+}
 
 if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
   console.log('Usage:');
@@ -15,13 +21,20 @@ if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
   console.log('  npx create-bubat --update <dir>       update framework files, preserve user data');
   console.log('  npx create-bubat --update --dir <dir> update embedded workspace');
   console.log('');
+  console.log('Version-pinned installs:');
+  console.log('  npx create-bubat@<version> <dir>');
+  console.log('  npx github:mgalela/bubat#<tag> <dir>');
+  console.log('  npx github:mgalela/bubat#<tag> --update <dir>');
+  console.log('');
   console.log('Examples:');
   console.log('  npx create-bubat my-arch');
   console.log('  npx create-bubat --dir .bubat');
   console.log('  npx create-bubat --update my-arch');
   console.log('  npx create-bubat --update --dir .bubat');
+  console.log('  npx github:mgalela/bubat#v1.0.0 my-arch');
+  console.log('  npx github:mgalela/bubat#v1.0.0 --update my-arch');
   console.log('');
-  console.log('Update preserves: shared/system-meta.md, raw/MANIFEST.md, stages/*/output/*');
+  console.log('Update preserves: shared/system-meta.md, raw/MANIFEST.md, raw/SOURCES.md, stages/*/output/*');
   process.exit(0);
 }
 
@@ -63,6 +76,7 @@ const COPY_EXCLUDE = new Set([
 const USER_DATA_FILES = new Set([
   path.join('shared', 'system-meta.md'),
   path.join('raw', 'MANIFEST.md'),
+  path.join('raw', 'SOURCES.md'),
 ]);
 
 // Returns true for files inside stages/*/output/ that are NOT .gitkeep.

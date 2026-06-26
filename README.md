@@ -24,65 +24,142 @@ raw/ → setup → 01-discovery → 01b-flow → 01c-bounded-context → 01d-dat
                                                                cavekit /ck:build
 ```
 
-| Stage | Output |
-|-------|--------|
-| `01-discovery` | System goals, NFRs, tech constraints, ADR log |
-| `01b-flow` | Business flows, user journeys, key scenarios |
-| `01c-bounded-context` | Bounded context map, ubiquitous language, context relationships |
-| `01d-data-model` | Entity inventory, ER model, storage hints |
-| `02-context` | C4 Level 1 — system context diagram |
-| `03-container` | C4 Level 2 — container diagram, interface contracts, sequences |
-| `04-component` | C4 Level 3 — component diagrams per container |
-| `05-document` | Final architecture document (assembled, audience-ready) — **optional**, for stakeholder review only |
-| `06-spec` | `SPEC.md` bridge → cavekit spec + `openapi.yaml` + `.proto` + language interfaces — reads stages 01–04 directly, does not require `05-document` |
-| `07-spec-validation` | Validate Stage 06 outputs for completeness, testability, and consistency |
-| `08-test-scaffold` | BDD/unit/integration/e2e test scenarios derived from validated spec |
+| Stage                 | Output                                                                                                                                          |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `01-discovery`        | System goals, NFRs, tech constraints, ADR log                                                                                                   |
+| `01b-flow`            | Business flows, user journeys, key scenarios                                                                                                    |
+| `01c-bounded-context` | Bounded context map, ubiquitous language, context relationships                                                                                 |
+| `01d-data-model`      | Entity inventory, ER model, storage hints                                                                                                       |
+| `02-context`          | C4 Level 1 — system context diagram                                                                                                             |
+| `03-container`        | C4 Level 2 — container diagram, interface contracts, sequences                                                                                  |
+| `04-component`        | C4 Level 3 — component diagrams per container + component code map                                                                              |
+| `05-document`         | Final architecture document (assembled, audience-ready) — **optional**, for stakeholder review only                                             |
+| `06-spec`             | `SPEC.md` bridge → cavekit spec + `openapi.yaml` + `.proto` + language interfaces — reads stages 01–04 directly, does not require `05-document` |
+| `07-spec-validation`  | Validate Stage 06 outputs for completeness, testability, and consistency                                                                        |
+| `08-test-scaffold`    | BDD/unit/integration/e2e test scenarios derived from validated spec                                                                             |
 
 ---
 
 ## Install
 
+### Claude Code
+
 **Standalone workspace** (open the created directory in Claude Code):
+
 ```bash
 npx create-bubat my-arch
 ```
 
 **Embed in existing project** (patches paths, adds `@import` hint for project `CLAUDE.md`):
+
 ```bash
 npx create-bubat --dir .bubat
 ```
 
 Then add the printed line to your project `CLAUDE.md`:
+
 ```
 @.bubat/CLAUDE.md
 ```
 
+Embed mode note:
+- workspace files live under `.bubat/`
+- raw files go in `.bubat/raw/`
+- triggers may be run from project root after skill update, or from `.bubat/` directly
+
 **Update an existing workspace** (preserves user data, updates framework files):
+
 ```bash
 npx create-bubat --update my-arch
 npx create-bubat --update --dir .bubat
 ```
 
-Preserved on update: `shared/system-meta.md`, `raw/MANIFEST.md`, `stages/*/output/*`.
+### Pi coding agent
+
+BUBAT also works as a pi package. Install from a local checkout:
+
+```bash
+pi install /path/to/bubat
+```
+
+Or for one project only:
+
+```bash
+pi install -l /path/to/bubat
+```
+
+Pi loads:
+- `extensions/bubat.ts` for native trigger routing
+- `skills/*/SKILL.md` as `/skill:bubat-*`
+- `commands/cl/*.md` as prompt templates
+
+Useful pi prompts after install:
+
+```text
+status
+stage 04
+raw add ./docs/system.md
+raw route
+triage add payment retry
+bridge
+trace component-code-map
+```
+
+**Install/update from a pinned release/tag** (not branch `main`):
+
+```bash
+# npm published version
+npx create-bubat@1.0.0 my-arch
+npx create-bubat@1.0.0 --update my-arch
+
+# GitHub release/tag
+npx github:mgalela/bubat#v1.0.0 my-arch
+npx github:mgalela/bubat#v1.0.0 --dir .bubat
+npx github:mgalela/bubat#v1.0.0 --update my-arch
+npx github:mgalela/bubat#v1.0.0 --update --dir .bubat
+```
+
+The script copies templates from the package version/tag that `npx` resolved, so pinned tag installs do not depend on branch `main`.
+
+Preserved on update: `shared/system-meta.md`, `raw/MANIFEST.md`, `raw/SOURCES.md`, `stages/*/output/*`.
 New stages added automatically.
+
+Existing project note:
+- use `@commands/cl/research_codebase.md` in each stage for targeted codebase exploration
+- save research findings under `shared/research/*.md` and index them in `shared/research-index.json`
+- useful for repos with existing code, docs, interfaces, migrations, tests
+- research findings improve stage precision; confirmed BUBAT outputs remain source of truth
 
 ---
 
 ## Quickstart
 
 **New system from scratch:**
+
 ```
 setup
 ```
 
 **Have existing docs (PRD, ADRs, diagrams, API specs)?**
+
+Standalone workspace:
+
 ```
-1. Drop files into raw/
+1. Drop files into raw/ or register external docs with `raw add <path>`
 2. raw route
 3. setup
 ```
 
+Embedded workspace (`--dir .bubat`):
+
+```
+1. Drop files into .bubat/raw/ or register external docs with `raw add <path>`
+2. Run raw route from project root or cd .bubat first
+3. setup
+```
+
 **Run pipeline stage by stage:**
+
 ```
 stages/01-discovery/CONTEXT.md   → discovery
 stages/01b-flow/CONTEXT.md       → flow
@@ -98,6 +175,7 @@ stages/08-test-scaffold/...      → test scaffold
 ```
 
 **Export to cavekit:**
+
 ```
 bridge
 → copy stages/06-spec/output/SPEC.md to project root
@@ -109,16 +187,18 @@ bridge
 
 ## Triggers
 
-| Keyword | Action |
-|---------|--------|
-| `setup` | Onboarding — collect system info, populate `shared/system-meta.md` |
-| `raw route` | Scan `raw/`, assign each file to stage(s), write `raw/MANIFEST.md` |
-| `status` | Show pipeline completion across all stages |
-| `bridge` | Run stage 06-spec — convert all outputs into `SPEC.md` + interface specs |
-| `diagram <stage>` | Re-render diagrams for a stage without re-running the full stage |
-| `update <stage(s)>` | Re-run stages after system changes — e.g. `update 03 04 05` |
-| `triage <idea>` | Map a new idea to entry stage(s) and cascade downstream impact |
-| `sync graphify` | Feed completed stage outputs back into the project graphify graph |
+| Keyword             | Action                                                                                         |
+| ------------------- | ---------------------------------------------------------------------------------------------- |
+| `setup`             | Onboarding — collect system info, populate `shared/system-meta.md`                             |
+| `stage <id>`        | Run a stage using shared stage registry — e.g. `stage 04`                                      |
+| `raw add <path>`    | Register external file/dir as raw source before routing — e.g. `raw add docs/`                 |
+| `raw route`         | Scan workspace `raw/` plus registered external sources, assign stage(s), write `raw/MANIFEST.md` |
+| `status`            | Show pipeline completion across all stages                                                     |
+| `bridge`            | Run stage 06-spec — convert all outputs into `SPEC.md` + interface specs                       |
+| `diagram <stage>`   | Re-render diagrams for a stage without re-running the full stage                               |
+| `update <stage(s)>` | Re-run stages after system changes — uses stage-focused codebase research on existing repos     |
+| `triage <idea>`     | Map feature/change request to impacted architecture stages, code map rows, and cavekit handoff |
+| `sync graphify`     | Feed completed stage outputs back into the project graphify graph                              |
 
 ---
 
@@ -131,19 +211,33 @@ BUBAT/
 ├── README.md                     this file
 ├── raw/                          drop existing materials here
 │   ├── README.md                 what to drop and how routing works
+│   ├── SOURCES.md                optional external source registry for `raw add`
 │   └── MANIFEST.md               generated by `raw route`
+├── triage/                       feature/change impact reports
 ├── setup/
 │   └── questionnaire.md          system onboarding
 ├── skills/                       Claude Code skills (auto-installed by create-bubat)
+│   ├── bubat-stage/              generic stage runner
+│   ├── bubat-raw-add/            external raw source registration skill
 │   ├── bubat-raw-route/          raw route skill
 │   ├── bubat-status/             status skill
 │   ├── bubat-diagram/            diagram skill
 │   ├── bubat-update/             update skill
-│   └── bubat-triage/             triage skill
+│   ├── bubat-triage/             triage skill
+│   ├── bubat-bridge/             cavekit bridge skill
+│   └── bubat-graphify-sync/      graphify sync skill
+├── commands/                     reusable command prompts
+│   └── cl/research_codebase.md   focused codebase exploration for existing projects
+├── agents/                       specialist sub-agents used by commands
+│   └── cl/...                    locator / analyzer / pattern finder / web research
 ├── shared/
 │   ├── system-meta.md            system name, purpose, tech stack, interface formats
 │   ├── c4-notation.md            C4 element rules and naming conventions
-│   └── stage-gates.md            cross-stage quality gates and rerun policy
+│   ├── stage-runbook.md          common stage execution protocol
+│   ├── stage-index.md            stage registry, inputs, outputs, load boundaries
+│   ├── output-catalog.md         artifact ownership and consumers
+│   ├── stage-gates.md            cross-stage quality gates and rerun policy
+│   └── architecture-source-of-truth.md  truth hierarchy, feature workflow, drift rules
 └── stages/
     ├── 01-discovery/             goals, NFRs, tech decisions
     ├── 01b-flow/                 business flows, scenarios
@@ -151,7 +245,7 @@ BUBAT/
     ├── 01d-data-model/           entity model, storage hints
     ├── 02-context/               C4 Level 1 diagram
     ├── 03-container/             C4 Level 2 diagram + contracts
-    ├── 04-component/             C4 Level 3 diagrams
+    ├── 04-component/             C4 Level 3 diagrams + component code map
     ├── 05-document/              final architecture doc
     ├── 06-spec/                  cavekit SPEC.md bridge + interface spec generation
     ├── 07-spec-validation/       spec completeness, testability, and consistency checks
@@ -159,6 +253,7 @@ BUBAT/
 ```
 
 Each stage has:
+
 - `CONTEXT.md` — agent instructions, inputs, process, audit checks
 - `references/` — guides, templates, format rules
 - `output/` — generated artifacts
@@ -169,31 +264,87 @@ Each stage has:
 
 Cross-stage gate rules live in `shared/stage-gates.md`.
 
-| Gate | Purpose |
-|------|---------|
-| Workspace gate | setup placeholders cleared; `raw/MANIFEST.md` exists |
-| Input gate | upstream outputs exist before downstream starts |
-| Stage audit gate | current stage `Audit` table passes before save |
-| Traceability gate | extracted decisions/flows/contracts/invariants cite sources |
-| Diagram gate | diagram code uses configured format; names match upstream labels |
-| ADR gate | no duplicate tech decisions on rerun; changed decisions append superseding ADR |
-| Bridge gate | `SPEC.md` constraints/invariants trace to extraction map; interface spec TODOs documented |
+| Gate                              | Purpose                                                                                                  |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Workspace gate                    | setup placeholders cleared; `raw/MANIFEST.md` exists                                                     |
+| Input gate                        | upstream outputs exist before downstream starts                                                          |
+| Stage audit gate                  | current stage `Audit` table passes before save                                                           |
+| Traceability gate                 | extracted decisions/flows/contracts/invariants cite sources                                              |
+| Diagram gate                      | diagram code uses configured format; names match upstream labels                                         |
+| ADR gate                          | no duplicate tech decisions on rerun; changed decisions append superseding ADR                           |
+| Bridge gate                       | `SPEC.md` constraints/invariants trace to extraction map; interface spec TODOs documented                |
+| Architecture source-of-truth gate | Architecture-significant changes have triage impact artifact; bridge before code; `update 04` after code |
 
 ---
 
 ## Raw Materials
 
-Drop any existing system documentation into `raw/` before running `setup`. Claude routes each file to the correct stage automatically.
+Drop existing system documentation into workspace `raw/` before running `setup`, or register external source paths with `raw add <path>`.
+- standalone: `raw/`
+- embedded: `.bubat/raw/`
+- external source examples: `docs/`, `openapi.yaml`, `../legacy-arch/`
 
-| Type | Examples |
-|------|----------|
-| Requirements | BRD, PRD, problem statement |
-| System docs | README, architecture doc, ADR log, Confluence export |
-| API specs | OpenAPI/Swagger YAML, GraphQL schema, Postman collection |
-| Diagrams | draw.io, Miro screenshot, Lucidchart export |
-| Process docs | Swimlane charts, BPMN exports, business flow diagrams |
-| Data docs | ERD, data dictionary, schema descriptions |
-| Constraints | Tech radar, platform mandates, compliance requirements |
+Claude routes each file to correct stage automatically.
+Requirements (BRD, PRD, problem statement), System docs (README, architecture doc, ADR log), API specs (OpenAPI/Swagger YAML, GraphQL schema, Postman collection), Process docs, Data docs (ERD, data dictionary, schema descriptions), Constraints (platform mandates, compliance requirements)
+
+---
+
+## Existing Project Workflow
+
+For existing repos, combine raw docs + codebase research:
+
+```text
+raw add docs/
+raw route
+setup
+stage <id>
+→ reuse matching shared/research-index.json entries as code map
+→ use @commands/cl/research_codebase.md with stage-focused question
+→ save research to shared/research/*.md
+→ sync/refresh index
+→ confirm checkpoint
+```
+
+Suggested stage research prompts:
+- `01-discovery` → goals, actors, integrations, NFR signals, runtime boundaries
+- `01b-flow` → user flows, business paths, entrypoints, error paths
+- `01c-bounded-context` → domain terms, modules, ownership boundaries
+- `01d-data-model` → entities, schemas, migrations, persistence patterns
+- `02-context` → external systems, inbound/outbound dependencies
+- `03-container` → services, databases, queues, deployment units, contracts
+- `04-component` → modules, packages, handlers, jobs, code map evidence
+- `05-document` → cross-check assembled narrative against live repo facts
+- `06-spec` → existing interfaces, OpenAPI/proto/contracts, task anchors
+- `07-spec-validation` → verify spec coverage against live implementation evidence
+- `08-test-scaffold` → inspect current test patterns, fixtures, coverage anchors
+
+## Implementation Reference
+
+Stages `01` through `04` are intended to be main reference for application implementation:
+
+| Layer                   | Role                                                                   |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `01–04` outputs         | business intent, domain boundaries, data model, containers, components |
+| `06-spec` outputs       | Cavekit-ready implementation plan                                      |
+| Codebase                | Runtime implementation                                                 |
+| `04-component` code map | Trace index from component to file path/symbol/line span               |
+| `triage/*-impact.md`    | Change intent and impact analysis                                      |
+
+Feature/change workflow:
+
+```text
+triage <feature request>
+→ writes triage/<date>-<feature>-impact.md
+→ update affected stages 01–04
+→ bridge
+→ cavekit updates/adds code
+→ update 04   # refresh code map
+→ bridge      # refresh SPEC task pointers if needed
+```
+
+Architecture-significant code work should start with `triage`. After code changes, refresh Stage 04 code map so future triage can tell cavekit which files to update or add.
+
+See `shared/architecture-source-of-truth.md` for governance and drift rules.
 
 ---
 
@@ -203,28 +354,34 @@ Stage `06-spec` bridges BUBAT architecture outputs into two categories of artifa
 
 **1. Cavekit SPEC.md** — zero information loss, caveman-encoded. Every NFR, contract, domain invariant, and tech decision compressed into the spec.
 
-| BUBAT Artifact | SPEC.md Section |
-|----------------|----------------|
-| Discovery goals + purpose | `§G` goal |
-| NFRs, tech locks, compliance | `§C` constraints |
-| Interface contracts, APIs, events | `§I` interfaces |
-| Tech decisions research findings | `§R` research |
-| BC rules, data constraints, scenario postconditions | `§V` invariants |
-| Container inventory (dependency-ordered) | `§T` tasks |
+| BUBAT Artifact                                      | SPEC.md Section  |
+| --------------------------------------------------- | ---------------- |
+| Discovery goals + purpose                           | `§G` goal        |
+| NFRs, tech locks, compliance                        | `§C` constraints |
+| Interface contracts, APIs, events                   | `§I` interfaces  |
+| Tech decisions research findings                    | `§R` research    |
+| BC rules, data constraints, scenario postconditions | `§V` invariants  |
+| Container inventory (dependency-ordered)            | `§T` tasks       |
 
 **2. Interface specs** — generated from container contracts and component diagrams.
 
-| Output file | Generated when |
-|-------------|---------------|
-| `openapi.yaml` | any HTTP/HTTPS contract exists |
-| `{slug}.proto` | any gRPC contract exists |
-| `{slug}-interfaces.go` | Go in tech stack |
-| `{slug}-interfaces.ts` | TypeScript / Node.js in tech stack |
-| `{slug}-interfaces.java` | Java / Kotlin in tech stack |
+Stage `04-component` also emits implementation trace artifact:
+
+- `{slug}-component-code-map.md` — component → file path + symbol + line span
+- source mode: `discovery` for existing code, `generated` after codegen/update
+
+| Output file              | Generated when                     |
+| ------------------------ | ---------------------------------- |
+| `openapi.yaml`           | any HTTP/HTTPS contract exists     |
+| `{slug}.proto`           | any gRPC contract exists           |
+| `{slug}-interfaces.go`   | Go in tech stack                   |
+| `{slug}-interfaces.ts`   | TypeScript / Node.js in tech stack |
+| `{slug}-interfaces.java` | Java / Kotlin in tech stack        |
 
 Format selection is auto-detected from tech stack and contract protocols, or set explicitly via `Interface formats` in `setup`.
 
 After `bridge`:
+
 1. Copy `stages/06-spec/output/SPEC.md` to project root
 2. Copy interface specs (`openapi.yaml`, `.proto`, `interfaces.*`) to project as needed
 3. Run `/ck:review` — adversarial spec review
@@ -238,7 +395,9 @@ Architecture changes → `update <stages>` → `bridge` → `/ck:check` → `/ck
 
 BUBAT integrates with [graphify](https://github.com/JuliusBrussee/graphify) in two directions:
 
-**Discovery pre-fill** — if `graphify-out/` exists at `project_path`, Stage 01 auto-detects it and loads `GRAPH_REPORT.md` + `graph.json` as a pre-fill reference before the user interview. Components, dependencies, and naming already extracted from code feed directly into the discovery report — no duplicate work.
+**Discovery pre-fill** — if `graphify-out/` exists at `project_path`, Stage 01 auto-detects it and loads `GRAPH_REPORT.md` + `graph.json` as a pre-fill reference before user interview. Components, dependencies, and naming already extracted from code feed directly into discovery report — no duplicate work.
+
+**Component implementation trace** — Stage 04 can inspect existing code under `project_path` and map each component to concrete files and line spans. If code does not exist yet, same artifact can be refreshed later after generation via `update 04`.
 
 **Sync back** — after stages are complete, `sync graphify` feeds BUBAT outputs back into the project graph:
 
@@ -250,14 +409,14 @@ sync graphify
 
 What graphify gains from BUBAT outputs:
 
-| BUBAT output | What graphify extracts |
-|---|---|
-| Discovery report | System purpose, user roles, external dependencies as named nodes |
-| Business flows | Flow names and step sequences as hyperedges |
-| BC map + context relationships | Domain boundaries and integration patterns as community-spanning edges |
-| Data model | Entity names and relationships with domain labels |
-| Architecture diagrams (Mermaid) | Container/component relationships as inferred edges |
-| Tech decisions log | ADR rationale as `rationale_for` edges linking decisions to components |
+| BUBAT output                    | What graphify extracts                                                 |
+| ------------------------------- | ---------------------------------------------------------------------- |
+| Discovery report                | System purpose, user roles, external dependencies as named nodes       |
+| Business flows                  | Flow names and step sequences as hyperedges                            |
+| BC map + context relationships  | Domain boundaries and integration patterns as community-spanning edges |
+| Data model                      | Entity names and relationships with domain labels                      |
+| Architecture diagrams (Mermaid) | Container/component relationships as inferred edges                    |
+| Tech decisions log              | ADR rationale as `rationale_for` edges linking decisions to components |
 
 Run after completing stages 01–04 minimum, or after any significant `update <stage>`.
 
@@ -267,12 +426,18 @@ Run after completing stages 01–04 minimum, or after any significant `update <s
 
 Triggers are implemented as installable Claude Code skills. `create-bubat` installs them automatically to `~/.claude/skills/` on install and `--update`.
 
-| Skill | Trigger |
-|-------|---------|
-| `bubat-raw-route` | `raw route` |
-| `bubat-status` | `status` |
-| `bubat-diagram` | `diagram <stage>` |
-| `bubat-update` | `update <stage(s)>` |
-| `bubat-triage` | `triage <idea>` |
+| Skill                 | Trigger             |
+| --------------------- | ------------------- |
+| `bubat-stage`         | `stage <id>`        |
+| `bubat-raw-add`       | `raw add <path>`    |
+| `bubat-raw-route`     | `raw route`         |
+| `bubat-status`        | `status`            |
+| `bubat-diagram`       | `diagram <stage>`   |
+| `bubat-update`        | `update <stage(s)>` |
+| `bubat-triage`        | `triage <idea>`     |
+| `bubat-bridge`        | `bridge`            |
+| `bubat-graphify-sync` | `sync graphify`     |
 
 Skills are standalone — they can be updated independently of the workspace via `npx create-bubat --update`.
+
+For existing project exploration, also use `commands/cl/research_codebase.md` with installed `agents/cl/*` helpers. Save reusable findings under `shared/research/*.md`; `refresh index` builds `shared/research-index.json` for later stage reuse.
