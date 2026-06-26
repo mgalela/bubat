@@ -33,7 +33,7 @@ raw/ → setup → 01-discovery → 01b-flow → 01c-bounded-context → 01d-dat
 | `02-context`          | C4 Level 1 — system context diagram                                                                                                             |
 | `03-container`        | C4 Level 2 — container diagram, interface contracts, sequences                                                                                  |
 | `04-component`        | C4 Level 3 — component diagrams per container + component code map                                                                              |
-| `05-document`         | Final architecture document (assembled, audience-ready) — **optional**, for stakeholder review only                                             |
+| `05-document`         | Final architecture document and optional FSD markdown (assembled, audience-ready) — **optional**, for stakeholder review only                    |
 | `06-spec`             | `SPEC.md` bridge → cavekit spec + `openapi.yaml` + `.proto` + language interfaces — reads stages 01–04 directly, does not require `05-document` |
 | `07-spec-validation`  | Validate Stage 06 outputs for completeness, testability, and consistency                                                                        |
 | `08-test-scaffold`    | BDD/unit/integration/e2e test scenarios derived from validated spec                                                                             |
@@ -104,6 +104,29 @@ triage add payment retry
 bridge
 trace component-code-map
 ```
+
+### DOCX generator tools
+
+BUBAT ships independent Markdown → `md/html/docx` tools under `tools/docx-generator/`. They can run inside BUBAT or standalone after copying that directory.
+
+```bash
+python3 tools/docx-generator/export-doc.py --list
+python3 tools/docx-generator/export-doc.py --source ./README.md --format docx --output ./output/readme.docx
+python3 tools/docx-generator/export-doc.py --template architecture --format docx --output ./output/architecture-template.docx
+python3 tools/docx-generator/select-output.py --mode architecture --format docx --root . --output-dir output/documents
+```
+
+Make targets:
+
+```bash
+make architecture-docx
+make fsd-docx
+make docs-docx
+make architecture-template-docx
+make fsd-template-docx
+```
+
+Mermaid blocks require `npx @mermaid-js/mermaid-cli` at render time. Plain Markdown/DOCX export uses Python standard library only.
 
 **Install/update from a pinned release/tag** (not branch `main`):
 
@@ -431,6 +454,7 @@ Triggers are implemented as installable Claude Code skills. `create-bubat` insta
 | `bubat-stage`         | `stage <id>`        |
 | `bubat-raw-add`       | `raw add <path>`    |
 | `bubat-raw-route`     | `raw route`         |
+| `bubat-r-feed-bubat`  | `bubat-r feed bubat [path]` |
 | `bubat-status`        | `status`            |
 | `bubat-diagram`       | `diagram <stage>`   |
 | `bubat-update`        | `update <stage(s)>` |

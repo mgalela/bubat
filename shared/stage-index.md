@@ -17,7 +17,7 @@ Registry for stage routing, inputs, references, outputs, and downstream dependen
 | `02-context` | Build C4 Level 1 system context | `01c-bounded-context/output/`, `01-discovery/output/`, `shared/c4-notation.md` | `stages/02-context/references/` | `{slug}-context.md` |
 | `03-container` | Build C4 Level 2 containers, contracts, sequences | `02-context/output/`, `01d-data-model/output/`, `01c-bounded-context/output/`, `01b-flow/output/`, `shared/c4-notation.md` | `stages/03-container/references/` | `{slug}-containers.md`, `{slug}-contracts.md`, `{slug}-sequences-l2.md` |
 | `04-component` | Build C4 Level 3 components, component sequences, scope, code map | `03-container/output/`, `01-discovery/output/`, `shared/system-meta.md`, `shared/c4-notation.md` | `stages/04-component/references/` | `{slug}-components.md`, `{slug}-component-scope.md`, `{slug}-sequences-l3.md`, `{slug}-component-code-map.md` |
-| `05-document` | Assemble final architecture document | `01-discovery/output/`, `01b-flow/output/`, `02-context/output/`, `03-container/output/`, `04-component/output/` | `stages/05-document/references/` | `{slug}-architecture.md` |
+| `05-document` | Assemble final architecture document and optional FSD markdown | `01-discovery/output/`, `01b-flow/output/`, `01c-bounded-context/output/`, `01d-data-model/output/`, `02-context/output/`, `03-container/output/`, `04-component/output/` | `stages/05-document/references/`, `tools/docx-generator/templates/` | `{slug}-architecture.md`, optional `{slug}-fsd.md` |
 | `06-spec` | Bridge architecture outputs to cavekit `SPEC.md` and interface specs | all available `01–04` outputs, `shared/system-meta.md`, optional `triage/*-impact.md` | `stages/06-spec/references/` | `SPEC.md`, `openapi.yaml`, `{slug}.proto`, `{slug}-interfaces.*`, `{slug}-extraction-map.md` |
 | `07-spec-validation` | Validate Stage 06 outputs | `06-spec/output/`, `shared/system-meta.md` | `stages/07-spec-validation/references/` | `{slug}-spec-validation.md` |
 | `08-test-scaffold` | Derive BDD/unit/integration/e2e scenarios | `07-spec-validation/output/`, `06-spec/output/`, `01b-flow/output/`, `04-component/output/` | `stages/08-test-scaffold/references/` | `{slug}-bdd-features.md`, `{slug}-unit-tests.md`, `{slug}-integration-tests.md`, `{slug}-e2e-tests.md`, `{slug}-coverage-matrix.md` |
@@ -45,6 +45,7 @@ Registry for stage routing, inputs, references, outputs, and downstream dependen
 | `stage <id>` | `skills/bubat-stage/SKILL.md` |
 | `setup` | setup questionnaire |
 | `raw route` | `skills/bubat-raw-route/SKILL.md` |
+| `bubat-r feed bubat [path]` | `skills/bubat-r-feed-bubat/SKILL.md` |
 | `status` | `skills/bubat-status/SKILL.md` |
 | `where <term>` / `trace <term>` / `find artifact <term>` | `skills/bubat-trace/SKILL.md` |
 | `refresh index` | `skills/bubat-refresh-index/SKILL.md` |

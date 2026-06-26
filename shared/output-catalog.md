@@ -13,7 +13,7 @@ Authoritative list of generated artifacts.
 | `02-context` | `{slug}-context.md` exists |
 | `03-container` | `{slug}-containers.md`, `{slug}-contracts.md`, `{slug}-sequences-l2.md` exist |
 | `04-component` | `{slug}-components.md`, `{slug}-component-scope.md`, `{slug}-sequences-l3.md`, `{slug}-component-code-map.md` exist |
-| `05-document` | `{slug}-architecture.md` exists |
+| `05-document` | `{slug}-architecture.md` exists; `{slug}-fsd.md` optional when FSD mode requested |
 | `06-spec` | `SPEC.md` and `{slug}-extraction-map.md` exist; `openapi.yaml`, `{slug}.proto`, and `{slug}-interfaces.*` are conditional |
 | `07-spec-validation` | `{slug}-spec-validation.md` exists |
 | `08-test-scaffold` | BDD, unit, integration, E2E, and coverage matrix outputs exist |
@@ -41,6 +41,7 @@ Authoritative list of generated artifacts.
 | `{slug}-sequences-l3.md` | `04-component` | `05`, `06` | component-level sequences |
 | `{slug}-component-code-map.md` | `04-component` | `05`, `06`, `08`, triage | component → file path/symbol/line span trace |
 | `{slug}-architecture.md` | `05-document` | stakeholders, optional graphify | final architecture document |
+| `{slug}-fsd.md` | `05-document` | DOCX generator, stakeholders | functional specification document markdown for DOCX/export |
 | `SPEC.md` | `06-spec` | cavekit, `07`, `08` | implementation spec |
 | `openapi.yaml` | `06-spec` | cavekit, `07`, `08` | HTTP API spec |
 | `{slug}.proto` | `06-spec` | cavekit, `07`, `08` | gRPC API spec |

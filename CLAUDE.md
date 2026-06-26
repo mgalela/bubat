@@ -24,6 +24,7 @@ Workspace root rule:
 | `stage <id>` | invoke `skills/bubat-stage` |
 | `raw add <path>` | invoke `skills/bubat-raw-add` |
 | `raw route` | invoke `skills/bubat-raw-route` |
+| `bubat-r feed bubat [path]` | invoke `skills/bubat-r-feed-bubat`; deterministic BUBAT-R reconstruction mapping into `raw/MANIFEST.md` |
 | `status` | invoke `skills/bubat-status` |
 | `where <term>` / `trace <term>` / `find artifact <term>` | invoke `skills/bubat-trace`; ultra-cheap grep-first manifest lookup, then optional summary/open |
 | `refresh index` | invoke `skills/bubat-refresh-index`; rebuild `shared/artifact-manifest.ndjson`, `shared/artifact-index.json`, `shared/triage-index.json`, `shared/research-index.json` |
